@@ -1,0 +1,3659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Criador de Cartas — Coleção de Personagens</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #3d315b 0%, #1b1b2f 35%, #11111f 75%);
+            color: #f5f0df;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+
+        /* =========================================================
+           CABEÇALHO DO SITE
+        ========================================================= */
+
+        .site-header {
+            width: 100%;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+            background: rgba(17, 17, 31, 0.88);
+            backdrop-filter: blur(8px);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 76px;
+            padding: 0 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .site-logo {
+            color: #f5f0df;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .site-logo span {
+            color: #c9a227;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .site-nav a {
+            color: #d8d2c2;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.25s ease;
+        }
+
+        .site-nav a:hover,
+        .site-nav a.active {
+            color: #c9a227;
+        }
+
+
+        /* =========================================================
+           TÍTULO DA PÁGINA
+        ========================================================= */
+
+        .page-heading {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 55px 28px 35px;
+            text-align: center;
+        }
+
+        .page-heading .eyebrow {
+            color: #c9a227;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .page-heading h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.1rem);
+            font-weight: 600;
+            color: #f8f2df;
+            letter-spacing: 0.03em;
+        }
+
+        .page-heading p {
+            margin-top: 12px;
+            color: #bcb6aa;
+            font-size: 0.95rem;
+        }
+
+        .heading-line {
+            width: 90px;
+            height: 1px;
+            margin: 22px auto 0;
+            background: #c9a227;
+            opacity: 0.7;
+        }
+
+
+        /* =========================================================
+           APLICAÇÃO
+        ========================================================= */
+
+        .app {
+            width: min(1200px, calc(100% - 40px));
+            margin: 0 auto 80px;
+
+            display: grid;
+            grid-template-columns: 360px 360px;
+            gap: 45px;
+            align-items: start;
+            justify-content: center;
+        }
+
+
+        /* =========================================================
+           PAINEL DE CONTROLES
+        ========================================================= */
+
+        .controls {
+            background: rgba(17, 17, 31, 0.88);
+            border: 1px solid rgba(201, 162, 39, 0.24);
+            border-radius: 18px;
+            padding: 25px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .controls h2 {
+            font-family: 'Playfair Display', serif;
+            color: #f2ead4;
+            font-size: 1.35rem;
+            margin-bottom: 22px;
+        }
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: #c9a227;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .field input[type="text"],
+        .field input[type="file"],
+        .field select {
+            width: 100%;
+            padding: 11px 12px;
+
+            color: #eee8d8;
+            background: #151524;
+            border: 1px solid rgba(201, 162, 39, 0.25);
+            border-radius: 8px;
+
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.86rem;
+            outline: none;
+        }
+
+        .field input[type="text"]:focus,
+        .field select:focus {
+            border-color: rgba(201, 162, 39, 0.7);
+        }
+
+        .field input[type="file"] {
+            padding: 9px;
+        }
+
+        .field input[type="range"] {
+            width: 100%;
+            accent-color: #c9a227;
+            cursor: pointer;
+        }
+
+        .range-value {
+            margin-top: 5px;
+            text-align: right;
+            color: #aaa49a;
+            font-size: 0.72rem;
+        }
+
+        .other-work {
+            display: none;
+        }
+
+        .other-work.visible {
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 10px;
+
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+
+            cursor: pointer;
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease,
+                background 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: #c9a227;
+            color: #11111f;
+        }
+
+        .btn-primary:hover {
+            background: #d9b63c;
+        }
+
+        .btn-secondary {
+            background: #29263d;
+            color: #e9e1cc;
+            border: 1px solid rgba(201, 162, 39, 0.25);
+        }
+
+        .btn-secondary:hover {
+            background: #343049;
+        }
+
+        .btn-album {
+            width: 100%;
+            margin-top: 10px;
+            background: transparent;
+            color: #c9a227;
+            border: 1px solid rgba(201, 162, 39, 0.55);
+        }
+
+        .btn-album:hover {
+            background: rgba(201, 162, 39, 0.1);
+        }
+
+
+        /* =========================================================
+           PREVISUALIZAÇÃO
+        ========================================================= */
+
+        .preview-area {
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .canvas-wrapper {
+            width: 360px;
+            max-width: 100%;
+            padding: 15px;
+
+            background: rgba(17, 17, 31, 0.55);
+            border: 1px solid rgba(201, 162, 39, 0.18);
+            border-radius: 22px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+
+            border-radius: 15px;
+        }
+
+
+        /* =========================================================
+           CARTAS RECENTES
+        ========================================================= */
+
+        .recent-section {
+            width: min(1200px, calc(100% - 40px));
+            margin: 0 auto 90px;
+        }
+
+        .recent-heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .recent-heading .eyebrow {
+            color: #c9a227;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .recent-heading h2 {
+            font-family: 'Playfair Display', serif;
+            color: #f8f2df;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 600;
+        }
+
+        .recent-heading p {
+            margin-top: 10px;
+            color: #aaa49a;
+            font-size: 0.85rem;
+        }
+
+        .recent-line {
+            width: 90px;
+            height: 1px;
+            margin: 20px auto 0;
+            background: #c9a227;
+            opacity: 0.65;
+        }
+
+        .recent-actions {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .view-album-btn {
+            flex: none;
+            min-width: 210px;
+            padding: 11px 20px;
+
+            color: #c9a227;
+            background: transparent;
+            border: 1px solid rgba(201, 162, 39, 0.55);
+        }
+
+        .view-album-btn:hover {
+            background: rgba(201, 162, 39, 0.1);
+        }
+
+        .recent-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .recent-card {
+            position: relative;
+            overflow: hidden;
+
+            background: rgba(17, 17, 31, 0.82);
+            border: 1px solid rgba(201, 162, 39, 0.25);
+            border-radius: 14px;
+
+            padding: 9px;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.25);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .recent-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(201, 162, 39, 0.7);
+
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, 0.4);
+        }
+
+        .recent-card-image {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            display: block;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+        }
+
+        .recent-card-info {
+            padding: 12px 6px 7px;
+            text-align: center;
+        }
+
+        .recent-card-name {
+            color: #f2ead4;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 600;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recent-card-work {
+            margin-top: 5px;
+            color: #c9a227;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recent-empty {
+            grid-column: 1 / -1;
+
+            padding: 55px 25px;
+
+            text-align: center;
+
+            background: rgba(17, 17, 31, 0.45);
+            border: 1px dashed rgba(201, 162, 39, 0.28);
+            border-radius: 18px;
+        }
+
+        .recent-empty-symbol {
+            color: #c9a227;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .recent-empty h3 {
+            color: #eee6d2;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .recent-empty p {
+            max-width: 500px;
+            margin: 9px auto 0;
+            color: #898494;
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           MODAL DA CARTA
+        ========================================================= */
+
+        .card-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+
+            background: rgba(5, 5, 10, 0.88);
+            backdrop-filter: blur(8px);
+        }
+
+        .card-modal.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+
+            max-width: min(500px, 90vw);
+            max-height: 90vh;
+        }
+
+        .modal-image {
+            display: block;
+
+            max-width: 100%;
+            max-height: 85vh;
+
+            border-radius: 16px;
+
+            border: 1px solid rgba(201, 162, 39, 0.6);
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.65);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+
+            width: 38px;
+            height: 38px;
+
+            padding: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex: none;
+
+            background: #1b1b2f;
+            color: #f1dfb1;
+
+            border: 1px solid #c9a227;
+            border-radius: 50%;
+
+            font-size: 1rem;
+            font-weight: 500;
+
+            transform: none;
+        }
+
+        .modal-close:hover {
+            background: #29263d;
+        }
+
+
+        /* =========================================================
+           RODAPÉ
+        ========================================================= */
+
+        .site-footer {
+            border-top: 1px solid rgba(201, 162, 39, 0.22);
+            background: rgba(17, 17, 31, 0.92);
+            padding: 38px 25px 28px;
+            text-align: center;
+        }
+
+        .footer-line {
+            width: 90px;
+            height: 1px;
+            margin: 0 auto 22px;
+            background: #c9a227;
+            opacity: 0.65;
+        }
+
+        .site-footer .footer-main {
+            font-family: 'Playfair Display', serif;
+            color: #eee6d2;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .site-footer .footer-main span {
+            color: #c9a227;
+        }
+
+        .site-footer .copyright {
+            color: #888393;
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+        }
+
+
+        /* =========================================================
+           RESPONSIVIDADE
+        ========================================================= */
+
+        @media (max-width: 1000px) {
+
+            .recent-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 850px) {
+
+            .header-inner {
+                flex-direction: column;
+                justify-content: center;
+                padding-top: 18px;
+                padding-bottom: 18px;
+                gap: 15px;
+            }
+
+            .site-nav {
+                gap: 18px;
+            }
+
+            .app {
+                grid-template-columns: 1fr;
+                max-width: 650px;
+            }
+
+            .controls {
+                order: 2;
+            }
+
+            .preview-area {
+                order: 1;
+            }
+
+            .canvas-wrapper {
+                width: min(100%, 650px);
+            }
+
+            .recent-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .page-heading {
+                padding-top: 40px;
+            }
+
+            .site-nav {
+                gap: 12px;
+            }
+
+            .site-nav a {
+                font-size: 0.68rem;
+            }
+
+            .app,
+            .recent-section {
+                width: min(100% - 24px, 650px);
+            }
+
+            .controls {
+                padding: 20px;
+            }
+
+            .canvas-wrapper {
+                padding: 9px;
+                border-radius: 16px;
+            }
+
+            .recent-grid {
+                gap: 14px;
+            }
+
+            .recent-card {
+                padding: 6px;
+            }
+
+            .recent-card-info {
+                padding: 9px 4px 5px;
+            }
+
+            .recent-card-name {
+                font-size: 0.85rem;
+            }
+
+            .recent-card-work {
+                font-size: 0.56rem;
+            }
+
+            .view-album-btn {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <!-- =========================================================
+         CABEÇALHO
+    ========================================================= -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <a
+                class="site-logo"
+                href="../index.html"
+            >
+                Um Mundo <span>Além das Páginas</span>
+            </a>
+
+            <nav
+                class="site-nav"
+                aria-label="Navegação principal"
+            >
+
+                <a href="../index.html">
+                    Início
+                </a>
+
+                <a
+                    href="criador.html"
+                    class="active"
+                >
+                    Criador de Cartas
+                </a>
+
+                <a href="album.html">
+                    Álbum
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         TÍTULO DA PÁGINA
+    ========================================================= -->
+
+    <section
+        class="page-heading"
+        id="criador"
+    >
+
+        <div class="eyebrow">
+            Coleção de personagens
+        </div>
+
+        <h1>
+            Criador de Cartas
+        </h1>
+
+        <p>
+            Transforme seus personagens em cartas colecionáveis.
+        </p>
+
+        <div class="heading-line"></div>
+
+    </section>
+
+
+    <!-- =========================================================
+         APLICAÇÃO
+    ========================================================= -->
+
+    <main class="app">
+
+
+        <!-- =====================================================
+             CONTROLES
+        ===================================================== -->
+
+        <section class="controls">
+
+            <h2>
+                Personalizar carta
+            </h2>
+
+
+            <!-- NOME -->
+
+            <div class="field">
+
+                <label for="name">
+                    Nome do personagem
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    value="W. Kusanagi"
+                >
+
+            </div>
+
+
+            <!-- IMAGEM -->
+
+            <div class="field">
+
+                <label for="imageInput">
+                    Imagem do personagem
+                </label>
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                >
+
+            </div>
+
+
+            <!-- ZOOM -->
+
+            <div class="field">
+
+                <label for="zoom">
+                    Zoom
+                </label>
+
+                <input
+                    type="range"
+                    id="zoom"
+                    min="0.8"
+                    max="2.5"
+                    step="0.01"
+                    value="1"
+                >
+
+                <div
+                    class="range-value"
+                    id="zoomValue"
+                >
+                    1.00×
+                </div>
+
+            </div>
+
+
+            <!-- POSIÇÃO HORIZONTAL -->
+
+            <div class="field">
+
+                <label for="positionX">
+                    Posição horizontal
+                </label>
+
+                <input
+                    type="range"
+                    id="positionX"
+                    min="-500"
+                    max="500"
+                    value="0"
+                >
+
+                <div
+                    class="range-value"
+                    id="positionXValue"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- POSIÇÃO VERTICAL -->
+
+            <div class="field">
+
+                <label for="positionY">
+                    Posição vertical
+                </label>
+
+                <input
+                    type="range"
+                    id="positionY"
+                    min="-500"
+                    max="500"
+                    value="0"
+                >
+
+                <div
+                    class="range-value"
+                    id="positionYValue"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- ESTILO DO NOME -->
+
+            <div class="field">
+
+                <label for="nameStyle">
+                    Estilo do nome
+                </label>
+
+                <select id="nameStyle">
+
+                    <option value="scroll">
+                        Pergaminho clássico
+                    </option>
+
+                    <option value="metal">
+                        Placa metálica gótica
+                    </option>
+
+                    <option value="ornamental-curves">
+                        Moldura ornamental — Curvas
+                    </option>
+
+                    <option value="ornamental-lines">
+                        Moldura ornamental — Linhas
+                    </option>
+
+                    <option value="ornamental-box">
+                        Moldura ornamental — Dupla
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- OBRA / COLEÇÃO -->
+
+            <div class="field">
+
+                <label for="work">
+                    Obra / Coleção do personagem
+                </label>
+
+                <select id="work">
+
+                    <option value="Um Casamento Político">
+                        Um Casamento Político
+                    </option>
+
+                    <option value="Enid, a Garota Lobo">
+                        Enid, a Garota Lobo
+                    </option>
+
+                    <option value="Entre a Luz e as Sombras">
+                        Entre a Luz e as Sombras
+                    </option>
+
+                    <option value="Academia Anthigonus">
+                        Academia Anthigonus
+                    </option>
+
+                    <option value="Gotei 13">
+                        Gotei 13
+                    </option>
+
+                    <option value="As Chamas sob a Coroa">
+                        As Chamas sob a Coroa
+                    </option>
+
+                    <option value="Outros">
+                        Outros
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- OUTRA OBRA -->
+
+            <div
+                class="field other-work"
+                id="otherWorkField"
+            >
+
+                <label for="otherWork">
+                    Nome da obra
+                </label>
+
+                <input
+                    type="text"
+                    id="otherWork"
+                    placeholder="Digite o nome da obra"
+                >
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="buttons">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    id="resetBtn"
+                >
+                    Restaurar
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="downloadBtn"
+                >
+                    Baixar PNG
+                </button>
+
+            </div>
+
+
+            <!-- ADICIONAR AO ÁLBUM -->
+
+            <button
+                type="button"
+                class="btn-album"
+                id="addAlbumBtn"
+            >
+                ✦ Adicionar ao álbum
+            </button>
+
+        </section>
+
+
+        <!-- =====================================================
+             PREVISUALIZAÇÃO
+        ===================================================== -->
+
+        <section class="preview-area">
+
+            <div class="canvas-wrapper">
+
+                <canvas
+                    id="cardCanvas"
+                    width="900"
+                    height="1350"
+                ></canvas>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         CARTAS RECENTES
+    ========================================================= -->
+
+    <section
+        class="recent-section"
+        id="recentes"
+    >
+
+        <div class="recent-heading">
+
+            <div class="eyebrow">
+                Coleção pessoal
+            </div>
+
+            <h2>
+                Cartas Recentes
+            </h2>
+
+            <p>
+                As quatro últimas cartas adicionadas ao seu álbum.
+            </p>
+
+            <div class="recent-line"></div>
+
+        </div>
+
+
+        <div class="recent-actions">
+
+            <button
+                type="button"
+                class="view-album-btn"
+                id="viewAlbumBtn"
+            >
+                Ver álbum completo
+            </button>
+
+        </div>
+
+
+        <div
+            class="recent-grid"
+            id="recentGrid"
+        ></div>
+
+    </section>
+
+
+    <!-- =========================================================
+         MODAL DA CARTA
+    ========================================================= -->
+
+    <div
+        class="card-modal"
+        id="cardModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-content">
+
+            <button
+                type="button"
+                class="modal-close"
+                id="modalClose"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+            <img
+                class="modal-image"
+                id="modalImage"
+                src=""
+                alt="Carta ampliada"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         RODAPÉ
+    ========================================================= -->
+
+    <footer class="site-footer">
+
+        <div class="footer-line"></div>
+
+        <p class="footer-main">
+            Um Mundo Além das Páginas
+            <span>—</span>
+            Onde cada história leva a um novo mundo.
+        </p>
+
+        <p class="copyright">
+            © 2026 D. Cavalcanttih. Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+
+        /* =========================================================
+           ELEMENTOS PRINCIPAIS
+        ========================================================= */
+
+        const canvas =
+            document.getElementById('cardCanvas');
+
+        const ctx =
+            canvas.getContext('2d');
+
+
+        const nameInput =
+            document.getElementById('name');
+
+        const imageInput =
+            document.getElementById('imageInput');
+
+
+        const zoomInput =
+            document.getElementById('zoom');
+
+        const positionXInput =
+            document.getElementById('positionX');
+
+        const positionYInput =
+            document.getElementById('positionY');
+
+
+        const nameStyleInput =
+            document.getElementById('nameStyle');
+
+
+        const workInput =
+            document.getElementById('work');
+
+        const otherWorkField =
+            document.getElementById('otherWorkField');
+
+        const otherWorkInput =
+            document.getElementById('otherWork');
+
+
+        const zoomValue =
+            document.getElementById('zoomValue');
+
+        const positionXValue =
+            document.getElementById('positionXValue');
+
+        const positionYValue =
+            document.getElementById('positionYValue');
+
+
+        const resetBtn =
+            document.getElementById('resetBtn');
+
+        const downloadBtn =
+            document.getElementById('downloadBtn');
+
+        const addAlbumBtn =
+            document.getElementById('addAlbumBtn');
+
+
+        const recentGrid =
+            document.getElementById('recentGrid');
+
+        const viewAlbumBtn =
+            document.getElementById('viewAlbumBtn');
+
+
+        const cardModal =
+            document.getElementById('cardModal');
+
+        const modalImage =
+            document.getElementById('modalImage');
+
+        const modalClose =
+            document.getElementById('modalClose');
+
+
+        /* =========================================================
+           IMAGEM PADRÃO
+        ========================================================= */
+
+        let characterImage =
+            new Image();
+
+        characterImage.crossOrigin =
+            "anonymous";
+
+        characterImage.src =
+            "https://i.postimg.cc/cJ893vgm/AP1Gcz-NTm-Xz4F3qrkp-LQuhwdg-Ye4do-Og.png";
+
+
+        /* =========================================================
+           BANCO DE DADOS LOCAL DO ÁLBUM
+           
+           IMPORTANTE:
+           O Álbum externo utiliza a versão 2.
+           O Criador utiliza exatamente a mesma versão
+           e o mesmo banco.
+        ========================================================= */
+
+        const DB_NAME =
+            "UmMundoAlemDasPaginasAlbum";
+
+        const DB_VERSION =
+            2;
+
+        const CARD_STORE =
+            "cards";
+
+        const COLLECTION_STORE =
+            "collections";
+
+
+        let albumDB =
+            null;
+
+        let albumDBPromise =
+            null;
+
+        let albumObjectUrls =
+            [];
+
+
+        /* =========================================================
+           RESETAR CONEXÃO DO BANCO
+        ========================================================= */
+
+        function resetDatabaseConnection() {
+
+            if (albumDB) {
+
+                try {
+
+                    albumDB.close();
+
+                } catch (error) {
+
+                    console.warn(
+                        "Não foi possível fechar a conexão antiga.",
+                        error
+                    );
+                }
+            }
+
+
+            albumDB =
+                null;
+
+            albumDBPromise =
+                null;
+        }
+
+
+        /* =========================================================
+           ABRIR BANCO DE DADOS
+        ========================================================= */
+
+        function openAlbumDatabase() {
+
+            if (albumDB) {
+
+                return Promise.resolve(
+                    albumDB
+                );
+            }
+
+
+            if (albumDBPromise) {
+
+                return albumDBPromise;
+            }
+
+
+            albumDBPromise =
+                new Promise(
+                    (resolve, reject) => {
+
+                        if (
+                            !("indexedDB" in window)
+                        ) {
+
+                            reject(
+                                new Error(
+                                    "IndexedDB não está disponível neste navegador."
+                                )
+                            );
+
+                            return;
+                        }
+
+
+                        const request =
+                            indexedDB.open(
+                                DB_NAME,
+                                DB_VERSION
+                            );
+
+
+                        request.onupgradeneeded =
+                            function(event) {
+
+                                const database =
+                                    event.target.result;
+
+
+                                if (
+                                    !database.objectStoreNames.contains(
+                                        CARD_STORE
+                                    )
+                                ) {
+
+                                    database.createObjectStore(
+                                        CARD_STORE,
+                                        {
+                                            keyPath: "id",
+                                            autoIncrement: true
+                                        }
+                                    );
+                                }
+
+
+                                if (
+                                    !database.objectStoreNames.contains(
+                                        COLLECTION_STORE
+                                    )
+                                ) {
+
+                                    database.createObjectStore(
+                                        COLLECTION_STORE,
+                                        {
+                                            keyPath: "id",
+                                            autoIncrement: true
+                                        }
+                                    );
+                                }
+                            };
+
+
+                        request.onsuccess =
+                            function(event) {
+
+                                const database =
+                                    event.target.result;
+
+
+                                albumDB =
+                                    database;
+
+
+                                database.onversionchange =
+                                    function() {
+
+                                        try {
+
+                                            database.close();
+
+                                        } catch (error) {
+
+                                            console.warn(
+                                                "Erro ao fechar banco durante atualização.",
+                                                error
+                                            );
+                                        }
+
+
+                                        if (
+                                            albumDB === database
+                                        ) {
+
+                                            albumDB =
+                                                null;
+
+                                            albumDBPromise =
+                                                null;
+                                        }
+                                    };
+
+
+                                database.onclose =
+                                    function() {
+
+                                        if (
+                                            albumDB === database
+                                        ) {
+
+                                            albumDB =
+                                                null;
+
+                                            albumDBPromise =
+                                                null;
+                                        }
+                                    };
+
+
+                                resolve(
+                                    database
+                                );
+                            };
+
+
+                        request.onerror =
+                            function() {
+
+                                albumDBPromise =
+                                    null;
+
+
+                                reject(
+                                    request.error ||
+                                    new Error(
+                                        "Não foi possível abrir o banco do álbum."
+                                    )
+                                );
+                            };
+
+
+                        request.onblocked =
+                            function() {
+
+                                console.warn(
+                                    "A abertura do banco do álbum está bloqueada. Feche outras abas que estejam utilizando o álbum."
+                                );
+                            };
+                    }
+                );
+
+
+            return albumDBPromise;
+        }
+
+
+        /* =========================================================
+           ERROS RECUPERÁVEIS DO INDEXEDDB
+        ========================================================= */
+
+        function isRecoverableDatabaseError(error) {
+
+            if (!error) {
+                return false;
+            }
+
+
+            return (
+                error.name === "InvalidStateError" ||
+                error.name === "TransactionInactiveError" ||
+                error.name === "NotFoundError"
+            );
+        }
+
+
+        /* =========================================================
+           EXECUTAR OPERAÇÃO COM RECUPERAÇÃO
+        ========================================================= */
+
+        async function runDatabaseOperation(
+            operation
+        ) {
+
+            let lastError =
+                null;
+
+
+            for (
+                let attempt = 0;
+                attempt < 2;
+                attempt++
+            ) {
+
+                try {
+
+                    const database =
+                        await openAlbumDatabase();
+
+
+                    return await operation(
+                        database
+                    );
+
+                } catch (error) {
+
+                    lastError =
+                        error;
+
+
+                    if (
+                        !isRecoverableDatabaseError(error) ||
+                        attempt === 1
+                    ) {
+
+                        throw error;
+                    }
+
+
+                    resetDatabaseConnection();
+                }
+            }
+
+
+            throw lastError;
+        }
+
+
+        /* =========================================================
+           GERAR BLOB DA CARTA
+        ========================================================= */
+
+        function canvasToBlob() {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    canvas.toBlob(
+                        blob => {
+
+                            if (blob) {
+
+                                resolve(
+                                    blob
+                                );
+
+                            } else {
+
+                                reject(
+                                    new Error(
+                                        "Não foi possível gerar a imagem da carta."
+                                    )
+                                );
+                            }
+                        },
+                        "image/png"
+                    );
+                }
+            );
+        }
+
+
+        /* =========================================================
+           SALVAR CARTA NO ÁLBUM
+        ========================================================= */
+
+        async function saveCardToAlbum(
+            card
+        ) {
+
+            return runDatabaseOperation(
+                database => {
+
+                    return new Promise(
+                        (resolve, reject) => {
+
+                            let transaction;
+
+
+                            try {
+
+                                transaction =
+                                    database.transaction(
+                                        CARD_STORE,
+                                        "readwrite"
+                                    );
+
+                            } catch (error) {
+
+                                reject(
+                                    error
+                                );
+
+                                return;
+                            }
+
+
+                            const store =
+                                transaction.objectStore(
+                                    CARD_STORE
+                                );
+
+
+                            const request =
+                                store.add(
+                                    card
+                                );
+
+
+                            request.onsuccess =
+                                function() {
+
+                                    card.__savedId =
+                                        request.result;
+                                };
+
+
+                            request.onerror =
+                                function() {
+
+                                    reject(
+                                        request.error ||
+                                        new Error(
+                                            "Não foi possível salvar a carta."
+                                        )
+                                    );
+                                };
+
+
+                            transaction.oncomplete =
+                                function() {
+
+                                    resolve(
+                                        card.__savedId
+                                    );
+                                };
+
+
+                            transaction.onerror =
+                                function() {
+
+                                    reject(
+                                        transaction.error ||
+                                        request.error ||
+                                        new Error(
+                                            "A transação do álbum falhou."
+                                        )
+                                    );
+                                };
+
+
+                            transaction.onabort =
+                                function() {
+
+                                    reject(
+                                        transaction.error ||
+                                        new Error(
+                                            "A transação do álbum foi cancelada."
+                                        )
+                                    );
+                                };
+                        }
+                    );
+                }
+            );
+        }
+
+
+        /* =========================================================
+           BUSCAR CARTAS
+        ========================================================= */
+
+        async function getAlbumCards() {
+
+            return runDatabaseOperation(
+                database => {
+
+                    return new Promise(
+                        (resolve, reject) => {
+
+                            let transaction;
+
+
+                            try {
+
+                                transaction =
+                                    database.transaction(
+                                        CARD_STORE,
+                                        "readonly"
+                                    );
+
+                            } catch (error) {
+
+                                reject(
+                                    error
+                                );
+
+                                return;
+                            }
+
+
+                            const store =
+                                transaction.objectStore(
+                                    CARD_STORE
+                                );
+
+
+                            const request =
+                                store.getAll();
+
+
+                            request.onsuccess =
+                                function() {
+
+                                    resolve(
+                                        request.result || []
+                                    );
+                                };
+
+
+                            request.onerror =
+                                function() {
+
+                                    reject(
+                                        request.error ||
+                                        new Error(
+                                            "Não foi possível carregar as cartas."
+                                        )
+                                    );
+                                };
+
+
+                            transaction.onerror =
+                                function() {
+
+                                    reject(
+                                        transaction.error ||
+                                        new Error(
+                                            "Não foi possível ler o álbum."
+                                        )
+                                    );
+                                };
+                        }
+                    );
+                }
+            );
+        }
+
+
+        /* =========================================================
+           GERENCIAR URLS TEMPORÁRIAS DE BLOBS
+        ========================================================= */
+
+        function revokeAlbumObjectUrls() {
+
+            albumObjectUrls.forEach(
+                url => {
+
+                    try {
+
+                        URL.revokeObjectURL(
+                            url
+                        );
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Não foi possível liberar URL temporária.",
+                            error
+                        );
+                    }
+                }
+            );
+
+
+            albumObjectUrls =
+                [];
+        }
+
+
+        /* =========================================================
+           OBTER FONTE DA IMAGEM DA CARTA
+           
+           Compatibilidade:
+           - cartas novas: Blob
+           - cartas antigas: Base64/string
+        ========================================================= */
+
+        function getCardImageSource(
+            card
+        ) {
+
+            if (
+                card.image instanceof Blob
+            ) {
+
+                const url =
+                    URL.createObjectURL(
+                        card.image
+                    );
+
+
+                albumObjectUrls.push(
+                    url
+                );
+
+
+                return url;
+            }
+
+
+            if (
+                typeof card.image ===
+                "string"
+            ) {
+
+                return card.image;
+            }
+
+
+            return "";
+        }
+
+
+        /* =========================================================
+           RENDERIZAR AS 4 CARTAS MAIS RECENTES
+        ========================================================= */
+
+        async function renderRecentCards() {
+
+            try {
+
+                const cards =
+                    await getAlbumCards();
+
+
+                revokeAlbumObjectUrls();
+
+
+                recentGrid.innerHTML =
+                    "";
+
+
+                /*
+                 * Ordenamos pela data de criação.
+                 * As quatro primeiras serão as mais recentes.
+                 */
+
+                cards.sort(
+                    (a, b) =>
+                        (b.createdAt || 0) -
+                        (a.createdAt || 0)
+                );
+
+
+                const recentCards =
+                    cards.slice(
+                        0,
+                        4
+                    );
+
+
+                if (
+                    recentCards.length === 0
+                ) {
+
+                    const empty =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    empty.className =
+                        "recent-empty";
+
+
+                    empty.innerHTML = `
+                        <div class="recent-empty-symbol">
+                            ✦
+                        </div>
+
+                        <h3>
+                            Nenhuma carta criada ainda
+                        </h3>
+
+                        <p>
+                            Crie uma carta e adicione-a ao álbum.
+                            Suas quatro criações mais recentes
+                            aparecerão aqui.
+                        </p>
+                    `;
+
+
+                    recentGrid.appendChild(
+                        empty
+                    );
+
+
+                    return;
+                }
+
+
+                recentCards.forEach(
+                    card => {
+
+                        const article =
+                            document.createElement(
+                                "article"
+                            );
+
+
+                        article.className =
+                            "recent-card";
+
+
+                        const image =
+                            document.createElement(
+                                "img"
+                            );
+
+
+                        image.className =
+                            "recent-card-image";
+
+
+                        const imageSource =
+                            getCardImageSource(
+                                card
+                            );
+
+
+                        image.src =
+                            imageSource;
+
+
+                        image.alt =
+                            card.name ||
+                            "Carta de personagem";
+
+
+                        image.addEventListener(
+                            "click",
+                            () => {
+
+                                modalImage.src =
+                                    imageSource;
+
+
+                                modalImage.alt =
+                                    card.name ||
+                                    "Carta ampliada";
+
+
+                                cardModal.classList.add(
+                                    "visible"
+                                );
+
+
+                                cardModal.setAttribute(
+                                    "aria-hidden",
+                                    "false"
+                                );
+                            }
+                        );
+
+
+                        const info =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        info.className =
+                            "recent-card-info";
+
+
+                        const cardName =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        cardName.className =
+                            "recent-card-name";
+
+
+                        cardName.textContent =
+                            card.name ||
+                            "Personagem";
+
+
+                        const cardWork =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        cardWork.className =
+                            "recent-card-work";
+
+
+                        cardWork.textContent =
+                            card.work ||
+                            card.collection ||
+                            "Coleção de personagens";
+
+
+                        info.appendChild(
+                            cardName
+                        );
+
+
+                        info.appendChild(
+                            cardWork
+                        );
+
+
+                        article.appendChild(
+                            image
+                        );
+
+
+                        article.appendChild(
+                            info
+                        );
+
+
+                        recentGrid.appendChild(
+                            article
+                        );
+                    }
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao carregar cartas recentes:",
+                    error
+                );
+            }
+        }
+
+
+        /* =========================================================
+           RETÂNGULO ARREDONDADO
+        ========================================================= */
+
+        function roundedRect(
+            ctx,
+            x,
+            y,
+            width,
+            height,
+            radius
+        ) {
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x + radius,
+                y
+            );
+
+            ctx.lineTo(
+                x + width - radius,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                x + width,
+                y,
+                x + width,
+                y + radius
+            );
+
+            ctx.lineTo(
+                x + width,
+                y + height - radius
+            );
+
+            ctx.quadraticCurveTo(
+                x + width,
+                y + height,
+                x + width - radius,
+                y + height
+            );
+
+            ctx.lineTo(
+                x + radius,
+                y + height
+            );
+
+            ctx.quadraticCurveTo(
+                x,
+                y + height,
+                x,
+                y + height - radius
+            );
+
+            ctx.lineTo(
+                x,
+                y + radius
+            );
+
+            ctx.quadraticCurveTo(
+                x,
+                y,
+                x + radius,
+                y
+            );
+
+            ctx.closePath();
+        }
+
+
+        /* =========================================================
+           PERGAMINHO CLÁSSICO
+        ========================================================= */
+
+        function drawScrollName() {
+
+            const x = 110;
+            const y = 55;
+            const width = 680;
+            const height = 105;
+
+
+            const gradient =
+                ctx.createLinearGradient(
+                    0,
+                    y,
+                    0,
+                    y + height
+                );
+
+
+            gradient.addColorStop(
+                0,
+                "#ead9ae"
+            );
+
+            gradient.addColorStop(
+                0.5,
+                "#c3a46a"
+            );
+
+            gradient.addColorStop(
+                1,
+                "#806039"
+            );
+
+
+            roundedRect(
+                ctx,
+                x,
+                y,
+                width,
+                height,
+                22
+            );
+
+
+            ctx.fillStyle =
+                gradient;
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#c9a227";
+
+            ctx.lineWidth =
+                3;
+
+            ctx.stroke();
+
+
+            ctx.fillStyle =
+                "#3a2815";
+
+            ctx.font =
+                "bold 48px Georgia, serif";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillText(
+                nameInput.value ||
+                "Personagem",
+                450,
+                y + height / 2
+            );
+        }
+
+
+        /* =========================================================
+           PLACA METÁLICA GÓTICA
+        ========================================================= */
+
+        function drawMetalName() {
+
+            const x = 120;
+            const y = 65;
+            const width = 660;
+            const height = 90;
+
+
+            const gradient =
+                ctx.createLinearGradient(
+                    0,
+                    y,
+                    0,
+                    y + height
+                );
+
+
+            gradient.addColorStop(
+                0,
+                "#46434a"
+            );
+
+            gradient.addColorStop(
+                0.45,
+                "#25232a"
+            );
+
+            gradient.addColorStop(
+                1,
+                "#111015"
+            );
+
+
+            roundedRect(
+                ctx,
+                x,
+                y,
+                width,
+                height,
+                10
+            );
+
+
+            ctx.fillStyle =
+                gradient;
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#c9a227";
+
+            ctx.lineWidth =
+                3;
+
+            ctx.stroke();
+
+
+            ctx.strokeStyle =
+                "rgba(255,255,255,0.12)";
+
+            ctx.lineWidth =
+                1;
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x + 15,
+                y + 14
+            );
+
+            ctx.lineTo(
+                x + width - 15,
+                y + 14
+            );
+
+            ctx.stroke();
+
+
+            ctx.fillStyle =
+                "#c9a227";
+
+            ctx.font =
+                "22px Georgia, serif";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillText(
+                "✦",
+                x + 30,
+                y + height / 2
+            );
+
+
+            ctx.fillText(
+                "✦",
+                x + width - 30,
+                y + height / 2
+            );
+
+
+            ctx.fillStyle =
+                "#eee4c9";
+
+            ctx.font =
+                "bold 43px Georgia, serif";
+
+
+            ctx.fillText(
+                nameInput.value ||
+                "Personagem",
+                450,
+                y + height / 2
+            );
+        }
+
+
+        /* =========================================================
+           MOLDURA ORNAMENTAL — CURVAS
+        ========================================================= */
+
+        function drawOrnamentalCurvesName() {
+
+            const centerX =
+                canvas.width / 2;
+
+            const y = 105;
+
+            const halfWidth = 340;
+
+
+            ctx.shadowColor =
+                "rgba(0,0,0,0.85)";
+
+            ctx.shadowBlur =
+                8;
+
+
+            ctx.strokeStyle =
+                "#c9a227";
+
+            ctx.lineWidth =
+                3;
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                centerX - halfWidth,
+                y
+            );
+
+            ctx.lineTo(
+                centerX - 120,
+                y
+            );
+
+            ctx.stroke();
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                centerX + 120,
+                y
+            );
+
+            ctx.lineTo(
+                centerX + halfWidth,
+                y
+            );
+
+            ctx.stroke();
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                centerX - 120,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                centerX - 145,
+                y - 25,
+                centerX - 170,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                centerX - 145,
+                y + 25,
+                centerX - 120,
+                y
+            );
+
+            ctx.stroke();
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                centerX + 120,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                centerX + 145,
+                y - 25,
+                centerX + 170,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                centerX + 145,
+                y + 25,
+                centerX + 120,
+                y
+            );
+
+            ctx.stroke();
+
+
+            ctx.fillStyle =
+                "#c9a227";
+
+            ctx.font =
+                "21px Georgia, serif";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillText(
+                "✦",
+                centerX - 190,
+                y
+            );
+
+
+            ctx.fillText(
+                "✦",
+                centerX + 190,
+                y
+            );
+
+
+            ctx.fillStyle =
+                "#f3ead5";
+
+            ctx.font =
+                "bold 42px Georgia, serif";
+
+            ctx.shadowColor =
+                "rgba(0,0,0,0.9)";
+
+            ctx.shadowBlur =
+                8;
+
+
+            ctx.fillText(
+                nameInput.value ||
+                "Personagem",
+                centerX,
+                y
+            );
+
+
+            ctx.shadowColor =
+                "transparent";
+
+            ctx.shadowBlur =
+                0;
+        }
+
+
+        /* =========================================================
+           MOLDURA ORNAMENTAL — LINHAS
+        ========================================================= */
+
+        function drawOrnamentalLinesName() {
+
+            const y = 105;
+
+
+            ctx.strokeStyle =
+                "#c9a227";
+
+            ctx.lineWidth =
+                2;
+
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                135,
+                y - 34
+            );
+
+            ctx.lineTo(
+                310,
+                y - 34
+            );
+
+
+            ctx.moveTo(
+                590,
+                y - 34
+            );
+
+            ctx.lineTo(
+                765,
+                y - 34
+            );
+
+
+            ctx.moveTo(
+                135,
+                y + 34
+            );
+
+            ctx.lineTo(
+                310,
+                y + 34
+            );
+
+
+            ctx.moveTo(
+                590,
+                y + 34
+            );
+
+            ctx.lineTo(
+                765,
+                y + 34
+            );
+
+
+            ctx.stroke();
+
+
+            ctx.fillStyle =
+                "#c9a227";
+
+
+            ctx.font =
+                "20px Georgia, serif";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillText(
+                "✦",
+                120,
+                y
+            );
+
+
+            ctx.fillText(
+                "✦",
+                780,
+                y
+            );
+
+
+            ctx.fillStyle =
+                "#f0e4c6";
+
+
+            ctx.font =
+                "bold 45px Georgia, serif";
+
+
+            ctx.fillText(
+                nameInput.value ||
+                "Personagem",
+                450,
+                y
+            );
+        }
+
+
+        /* =========================================================
+           MOLDURA ORNAMENTAL — DUPLA
+        ========================================================= */
+
+        function drawOrnamentalBoxName() {
+
+            const width = 770;
+            const height = 125;
+
+            const x =
+                (canvas.width - width) / 2;
+
+            const y = 50;
+
+
+            roundedRect(
+                ctx,
+                x,
+                y,
+                width,
+                height,
+                16
+            );
+
+
+            ctx.fillStyle =
+                "rgba(17,17,31,0.84)";
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#C9A227";
+
+            ctx.lineWidth =
+                2;
+
+            ctx.stroke();
+
+
+            roundedRect(
+                ctx,
+                x + 9,
+                y + 9,
+                width - 18,
+                height - 18,
+                11
+            );
+
+
+            ctx.strokeStyle =
+                "rgba(201,162,39,0.55)";
+
+            ctx.lineWidth =
+                1;
+
+            ctx.stroke();
+
+
+            ctx.fillStyle =
+                "#C9A227";
+
+            ctx.font =
+                "600 42px 'Playfair Display', serif";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            const text =
+                nameInput.value ||
+                "Personagem";
+
+
+            let fontSize = 42;
+
+
+            ctx.font =
+                `600 ${fontSize}px 'Playfair Display', serif`;
+
+
+            if (
+                ctx.measureText(text).width >
+                680
+            ) {
+
+                ctx.font =
+                    "600 35px 'Playfair Display', serif";
+            }
+
+
+            ctx.fillText(
+                text,
+                canvas.width / 2,
+                y + height / 2
+            );
+
+
+            ctx.font =
+                "24px serif";
+
+
+            ctx.fillText(
+                "✦",
+                x + 38,
+                y + height / 2
+            );
+
+
+            ctx.fillText(
+                "✦",
+                x + width - 38,
+                y + height / 2
+            );
+        }
+
+
+        /* =========================================================
+           ESCOLHA DO ESTILO DO NOME
+        ========================================================= */
+
+        function drawCharacterName() {
+
+            const style =
+                nameStyleInput.value;
+
+
+            if (
+                style ===
+                "metal"
+            ) {
+
+                drawMetalName();
+
+            } else if (
+                style ===
+                "ornamental-curves"
+            ) {
+
+                drawOrnamentalCurvesName();
+
+            } else if (
+                style ===
+                "ornamental-lines"
+            ) {
+
+                drawOrnamentalLinesName();
+
+            } else if (
+                style ===
+                "ornamental-box"
+            ) {
+
+                drawOrnamentalBoxName();
+
+            } else {
+
+                drawScrollName();
+            }
+        }
+
+
+        /* =========================================================
+           OBRA / COLEÇÃO DO PERSONAGEM
+        ========================================================= */
+
+        function getSelectedWork() {
+
+            if (
+                workInput.value ===
+                "Outros"
+            ) {
+
+                return (
+                    otherWorkInput.value.trim() ||
+                    "Coleção de personagens"
+                );
+            }
+
+
+            return workInput.value;
+        }
+
+
+        /* =========================================================
+           NOME DA OBRA NO RODAPÉ DA CARTA
+        ========================================================= */
+
+        function drawWorkName() {
+
+            const text =
+                getSelectedWork();
+
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.font =
+                "bold 23px Georgia, serif";
+
+
+            ctx.shadowColor =
+                "rgba(0,0,0,0.8)";
+
+            ctx.shadowBlur =
+                6;
+
+            ctx.shadowOffsetX =
+                1;
+
+            ctx.shadowOffsetY =
+                2;
+
+
+            ctx.fillStyle =
+                "#f0e4c6";
+
+
+            ctx.fillText(
+                `✦ ${text.toUpperCase()} ✦`,
+                450,
+                1285
+            );
+
+
+            ctx.shadowColor =
+                "transparent";
+
+            ctx.shadowBlur =
+                0;
+
+            ctx.shadowOffsetX =
+                0;
+
+            ctx.shadowOffsetY =
+                0;
+        }
+
+
+        /* =========================================================
+           DESENHO PRINCIPAL
+        ========================================================= */
+
+        function draw() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            /* =====================================================
+               FUNDO
+            ===================================================== */
+
+            const background =
+                ctx.createLinearGradient(
+                    0,
+                    0,
+                    0,
+                    canvas.height
+                );
+
+
+            background.addColorStop(
+                0,
+                "#17151f"
+            );
+
+
+            background.addColorStop(
+                1,
+                "#08080d"
+            );
+
+
+            ctx.fillStyle =
+                background;
+
+
+            roundedRect(
+                ctx,
+                0,
+                0,
+                canvas.width,
+                canvas.height,
+                28
+            );
+
+
+            ctx.fill();
+
+
+            /* =====================================================
+               IMAGEM
+            ===================================================== */
+
+            if (
+                characterImage.complete &&
+                characterImage.naturalWidth > 0
+            ) {
+
+                const imgWidth =
+                    characterImage.naturalWidth;
+
+                const imgHeight =
+                    characterImage.naturalHeight;
+
+
+                const scale =
+                    Math.max(
+                        canvas.width / imgWidth,
+                        canvas.height / imgHeight
+                    ) *
+                    parseFloat(
+                        zoomInput.value
+                    );
+
+
+                const drawWidth =
+                    imgWidth * scale;
+
+                const drawHeight =
+                    imgHeight * scale;
+
+
+                const offsetX =
+                    (canvas.width - drawWidth) / 2 +
+                    parseInt(
+                        positionXInput.value
+                    );
+
+
+                const offsetY =
+                    (canvas.height - drawHeight) / 2 +
+                    parseInt(
+                        positionYInput.value
+                    );
+
+
+                ctx.save();
+
+
+                roundedRect(
+                    ctx,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height,
+                    28
+                );
+
+
+                ctx.clip();
+
+
+                ctx.drawImage(
+                    characterImage,
+                    offsetX,
+                    offsetY,
+                    drawWidth,
+                    drawHeight
+                );
+
+
+                /* =================================================
+                   VINHETA
+                ================================================= */
+
+                const vignette =
+                    ctx.createRadialGradient(
+                        450,
+                        550,
+                        150,
+                        450,
+                        650,
+                        850
+                    );
+
+
+                vignette.addColorStop(
+                    0,
+                    "rgba(0,0,0,0)"
+                );
+
+
+                vignette.addColorStop(
+                    0.7,
+                    "rgba(0,0,0,0.08)"
+                );
+
+
+                vignette.addColorStop(
+                    1,
+                    "rgba(0,0,0,0.65)"
+                );
+
+
+                ctx.fillStyle =
+                    vignette;
+
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+
+                ctx.restore();
+            }
+
+
+            /* =====================================================
+               MOLDURA INTERNA
+            ===================================================== */
+
+            ctx.save();
+
+
+            roundedRect(
+                ctx,
+                14,
+                14,
+                canvas.width - 28,
+                canvas.height - 28,
+                22
+            );
+
+
+            ctx.strokeStyle =
+                "rgba(201,162,39,0.85)";
+
+            ctx.lineWidth =
+                2;
+
+
+            ctx.stroke();
+
+
+            ctx.restore();
+
+
+            /* =====================================================
+               NOME
+            ===================================================== */
+
+            drawCharacterName();
+
+
+            /* =====================================================
+               OBRA / COLEÇÃO
+            ===================================================== */
+
+            drawWorkName();
+        }
+
+
+        /* =========================================================
+           ATUALIZAÇÃO DOS VALORES
+        ========================================================= */
+
+        zoomInput.addEventListener(
+            "input",
+            () => {
+
+                zoomValue.textContent =
+                    `${parseFloat(
+                        zoomInput.value
+                    ).toFixed(2)}×`;
+
+                draw();
+            }
+        );
+
+
+        positionXInput.addEventListener(
+            "input",
+            () => {
+
+                positionXValue.textContent =
+                    positionXInput.value;
+
+                draw();
+            }
+        );
+
+
+        positionYInput.addEventListener(
+            "input",
+            () => {
+
+                positionYValue.textContent =
+                    positionYInput.value;
+
+                draw();
+            }
+        );
+
+
+        /* =========================================================
+           CAMPOS DE TEXTO
+        ========================================================= */
+
+        nameInput.addEventListener(
+            "input",
+            draw
+        );
+
+
+        nameStyleInput.addEventListener(
+            "change",
+            draw
+        );
+
+
+        otherWorkInput.addEventListener(
+            "input",
+            draw
+        );
+
+
+        /* =========================================================
+           SELEÇÃO DA OBRA
+        ========================================================= */
+
+        workInput.addEventListener(
+            "change",
+            () => {
+
+                if (
+                    workInput.value ===
+                    "Outros"
+                ) {
+
+                    otherWorkField.classList.add(
+                        "visible"
+                    );
+
+                } else {
+
+                    otherWorkField.classList.remove(
+                        "visible"
+                    );
+                }
+
+
+                draw();
+            }
+        );
+
+
+        /* =========================================================
+           CARREGAR IMAGEM
+        ========================================================= */
+
+        imageInput.addEventListener(
+            "change",
+            event => {
+
+                const file =
+                    event.target.files[0];
+
+
+                if (!file) {
+                    return;
+                }
+
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function(e) {
+
+                        characterImage =
+                            new Image();
+
+
+                        characterImage.onload =
+                            function() {
+
+                                draw();
+                            };
+
+
+                        characterImage.src =
+                            e.target.result;
+                    };
+
+
+                reader.readAsDataURL(file);
+            }
+        );
+
+
+        /* =========================================================
+           RESTAURAR
+        ========================================================= */
+
+        resetBtn.addEventListener(
+            "click",
+            () => {
+
+                nameInput.value =
+                    "W. Kusanagi";
+
+
+                zoomInput.value =
+                    "1";
+
+
+                positionXInput.value =
+                    "0";
+
+
+                positionYInput.value =
+                    "0";
+
+
+                nameStyleInput.value =
+                    "scroll";
+
+
+                workInput.value =
+                    "Um Casamento Político";
+
+
+                otherWorkInput.value =
+                    "";
+
+
+                otherWorkField.classList.remove(
+                    "visible"
+                );
+
+
+                imageInput.value =
+                    "";
+
+
+                characterImage =
+                    new Image();
+
+
+                characterImage.crossOrigin =
+                    "anonymous";
+
+
+                characterImage.onload =
+                    function() {
+
+                        draw();
+                    };
+
+
+                characterImage.onerror =
+                    function() {
+
+                        draw();
+                    };
+
+
+                characterImage.src =
+                    "https://i.postimg.cc/cJ893vgm/AP1Gcz-NTm-Xz4F3qrkp-LQuhwdg-Ye4do-Og.png";
+
+
+                zoomValue.textContent =
+                    "1.00×";
+
+
+                positionXValue.textContent =
+                    "0";
+
+
+                positionYValue.textContent =
+                    "0";
+
+
+                draw();
+            }
+        );
+
+
+        /* =========================================================
+           DOWNLOAD
+        ========================================================= */
+
+        downloadBtn.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    const link =
+                        document.createElement("a");
+
+
+                    link.download =
+                        `${nameInput.value || "personagem"}-carta.png`;
+
+
+                    link.href =
+                        canvas.toDataURL(
+                            "image/png"
+                        );
+
+
+                    link.click();
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    alert(
+                        "Não foi possível gerar o PNG desta carta. Verifique se a imagem utilizada permite exportação."
+                    );
+                }
+            }
+        );
+
+
+        /* =========================================================
+           ADICIONAR AO ÁLBUM
+        ========================================================= */
+
+        addAlbumBtn.addEventListener(
+            "click",
+            async () => {
+
+                addAlbumBtn.disabled =
+                    true;
+
+
+                const originalText =
+                    addAlbumBtn.textContent;
+
+
+                addAlbumBtn.textContent =
+                    "Salvando...";
+
+
+                try {
+
+                    const name =
+                        nameInput.value.trim() ||
+                        "Personagem";
+
+
+                    const work =
+                        getSelectedWork();
+
+
+                    const image =
+                        await canvasToBlob();
+
+
+                    const card = {
+
+                        name:
+                            name,
+
+                        work:
+                            work,
+
+                        image:
+                            image,
+
+                        createdAt:
+                            Date.now()
+                    };
+
+
+                    const savedId =
+                        await saveCardToAlbum(
+                            card
+                        );
+
+
+                    /*
+                     * Confirmação adicional:
+                     * verificamos se a carta realmente existe
+                     * no banco depois da gravação.
+                     */
+
+                    const cards =
+                        await getAlbumCards();
+
+
+                    const savedCard =
+                        cards.find(
+                            savedCard =>
+                                savedCard.id ===
+                                savedId
+                        );
+
+
+                    if (!savedCard) {
+
+                        throw new Error(
+                            "A carta não foi encontrada após o salvamento."
+                        );
+                    }
+
+
+                    /*
+                     * Atualizamos somente as cartas recentes.
+                     */
+
+                    await renderRecentCards();
+
+
+                    /*
+                     * Levamos o usuário até a seção
+                     * das criações recentes.
+                     */
+
+                    document
+                        .getElementById("recentes")
+                        .scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Erro ao adicionar carta ao álbum:",
+                        error
+                    );
+
+
+                    if (
+                        isRecoverableDatabaseError(
+                            error
+                        )
+                    ) {
+
+                        resetDatabaseConnection();
+                    }
+
+
+                    alert(
+                        "Não foi possível adicionar esta carta ao álbum."
+                    );
+
+                } finally {
+
+                    addAlbumBtn.disabled =
+                        false;
+
+
+                    addAlbumBtn.textContent =
+                        originalText;
+                }
+            }
+        );
+
+
+        /* =========================================================
+           ABRIR ÁLBUM COMPLETO
+        ========================================================= */
+
+        viewAlbumBtn.addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    "album.html";
+            }
+        );
+
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
+
+        function closeModal() {
+
+            cardModal.classList.remove(
+                "visible"
+            );
+
+
+            cardModal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            modalImage.src =
+                "";
+        }
+
+
+        modalClose.addEventListener(
+            "click",
+            closeModal
+        );
+
+
+        cardModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    cardModal
+                ) {
+
+                    closeModal();
+                }
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
+
+                    closeModal();
+                }
+            }
+        );
+
+
+        /* =========================================================
+           INICIALIZAÇÃO DO BANCO E DAS CARTAS RECENTES
+        ========================================================= */
+
+        openAlbumDatabase()
+            .then(
+                () => {
+
+                    renderRecentCards();
+                }
+            )
+            .catch(
+                error => {
+
+                    console.error(
+                        "Erro ao iniciar banco do álbum:",
+                        error
+                    );
+                }
+            );
+
+
+        /* =========================================================
+           INICIALIZAÇÃO DA IMAGEM
+        ========================================================= */
+
+        characterImage.onload =
+            function() {
+
+                draw();
+            };
+
+
+        characterImage.onerror =
+            function() {
+
+                draw();
+            };
+
+
+        draw();
+
+    </script>
+
+</body>
+</html>
