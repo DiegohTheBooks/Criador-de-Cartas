@@ -1,0 +1,1910 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Criador de Cartas — Coleção de Personagens</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, #3d315b 0%, #1b1b2f 35%, #11111f 75%);
+    color: #f5f0df;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.site-header {
+    width: 100%;
+    border-bottom: 1px solid rgba(201,162,39,.25);
+    background: rgba(17,17,31,.88);
+    backdrop-filter: blur(8px);
+}
+
+.header-inner {
+    max-width: 1200px;
+    min-height: 76px;
+    margin: auto;
+    padding: 0 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.site-logo {
+    color: #f5f0df;
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.site-logo span {
+    color: #c9a227;
+}
+
+.site-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.site-nav a {
+    color: #d8d2c2;
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+    color: #c9a227;
+}
+
+.page-heading {
+    max-width: 1200px;
+    margin: auto;
+    padding: 55px 28px 35px;
+    text-align: center;
+}
+
+.eyebrow {
+    color: #c9a227;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+}
+
+.page-heading h1 {
+    margin-top: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem,4vw,3.1rem);
+}
+
+.page-heading p {
+    margin-top: 12px;
+    color: #bcb6aa;
+    font-size: .95rem;
+}
+
+.heading-line {
+    width: 90px;
+    height: 1px;
+    margin: 22px auto 0;
+    background: #c9a227;
+}
+
+.app {
+    width: min(1200px,calc(100% - 40px));
+    margin: 0 auto 80px;
+
+    display: grid;
+    grid-template-columns: 390px 360px;
+    gap: 45px;
+    justify-content: center;
+    align-items: start;
+}
+
+.controls {
+    background: rgba(17,17,31,.88);
+    border: 1px solid rgba(201,162,39,.24);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.25);
+}
+
+.controls h2 {
+    font-family: 'Playfair Display',serif;
+    font-size: 1.35rem;
+    margin-bottom: 22px;
+}
+
+.field {
+    margin-bottom: 17px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #c9a227;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 11px 12px;
+    color: #eee8d8;
+    background: #151524;
+    border: 1px solid rgba(201,162,39,.25);
+    border-radius: 8px;
+    font-family: 'Montserrat',sans-serif;
+    font-size: .86rem;
+    outline: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: rgba(201,162,39,.7);
+}
+
+.field textarea {
+    min-height: 105px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+}
+
+.stat label {
+    text-align: center;
+}
+
+.stat input {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.other-work {
+    display: none;
+}
+
+.other-work.visible {
+    display: block;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 10px;
+    font-family: 'Montserrat',sans-serif;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: .65;
+    cursor: wait;
+    transform: none;
+}
+
+.btn-primary {
+    background: #c9a227;
+    color: #11111f;
+}
+
+.btn-primary:hover {
+    background: #d9b63c;
+}
+
+.btn-secondary {
+    background: #29263d;
+    color: #e9e1cc;
+    border: 1px solid rgba(201,162,39,.25);
+}
+
+.btn-album {
+    width: 100%;
+    margin-top: 10px;
+    background: transparent;
+    color: #c9a227;
+    border: 1px solid rgba(201,162,39,.55);
+}
+
+.preview-area {
+    display: flex;
+    justify-content: center;
+}
+
+.canvas-wrapper {
+    width: 360px;
+    max-width: 100%;
+    padding: 15px;
+    background: rgba(17,17,31,.55);
+    border: 1px solid rgba(201,162,39,.18);
+    border-radius: 22px;
+    box-shadow: 0 25px 70px rgba(0,0,0,.35);
+}
+
+canvas {
+    width: 100%;
+    display: block;
+    border-radius: 15px;
+}
+
+.recent-section {
+    width: min(1200px,calc(100% - 40px));
+    margin: 0 auto 90px;
+}
+
+.recent-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.recent-heading h2 {
+    margin-top: 10px;
+    font-family: 'Playfair Display',serif;
+}
+
+.recent-heading p {
+    margin-top: 10px;
+    color: #aaa49a;
+    font-size: .85rem;
+}
+
+.recent-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 22px;
+}
+
+.recent-card {
+    padding: 9px;
+    background: rgba(17,17,31,.82);
+    border: 1px solid rgba(201,162,39,.25);
+    border-radius: 14px;
+    transition: .25s;
+}
+
+.recent-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(201,162,39,.7);
+}
+
+.recent-card-image {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.recent-card-info {
+    padding: 12px 6px 7px;
+    text-align: center;
+}
+
+.recent-card-name {
+    color: #f2ead4;
+    font-family: 'Playfair Display',serif;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.recent-card-work {
+    margin-top: 5px;
+    color: #c9a227;
+    font-size: .65rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.recent-empty {
+    grid-column: 1/-1;
+    padding: 55px 25px;
+    text-align: center;
+    border: 1px dashed rgba(201,162,39,.28);
+    border-radius: 18px;
+    color: #aaa49a;
+}
+
+.card-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background: rgba(5,5,10,.88);
+    backdrop-filter: blur(8px);
+}
+
+.card-modal.visible {
+    display: flex;
+}
+
+.modal-content {
+    position: relative;
+    max-width: min(500px,90vw);
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: 16px;
+    border: 1px solid rgba(201,162,39,.6);
+}
+
+.modal-close {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 50%;
+    background: #1b1b2f;
+    color: #f1dfb1;
+    border: 1px solid #c9a227;
+}
+
+.site-footer {
+    border-top: 1px solid rgba(201,162,39,.22);
+    background: rgba(17,17,31,.92);
+    padding: 38px 25px 28px;
+    text-align: center;
+}
+
+.footer-line {
+    width: 90px;
+    height: 1px;
+    margin: 0 auto 22px;
+    background: #c9a227;
+}
+
+.footer-main {
+    font-family: 'Playfair Display',serif;
+}
+
+.footer-main span {
+    color: #c9a227;
+}
+
+.copyright {
+    margin-top: 10px;
+    color: #888393;
+    font-size: .72rem;
+}
+
+@media(max-width:1000px) {
+    .recent-grid {
+        grid-template-columns: repeat(3,1fr);
+    }
+}
+
+@media(max-width:850px) {
+    .header-inner {
+        flex-direction: column;
+        padding: 18px 28px;
+    }
+
+    .app {
+        grid-template-columns: 1fr;
+        max-width: 650px;
+    }
+
+    .preview-area {
+        order: 1;
+    }
+
+    .controls {
+        order: 2;
+    }
+}
+
+@media(max-width:600px) {
+    .recent-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media(max-width:450px) {
+    .recent-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .buttons {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+
+        <a class="site-logo" href="#">
+            Um Mundo <span>Além das Páginas</span>
+        </a>
+
+        <nav class="site-nav">
+            <a class="active" href="criador.html">Criador</a>
+            <a href="album.html">Álbum</a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="page-heading">
+
+    <div class="eyebrow">Coleção de Personagens</div>
+
+    <h1>Criador de Cartas</h1>
+
+    <p>
+        Crie sua carta, defina seus atributos e registre sua habilidade.
+    </p>
+
+    <div class="heading-line"></div>
+
+</section>
+
+<main class="app">
+
+<section class="controls">
+
+    <h2>Dados da carta</h2>
+
+    <div class="field">
+        <label for="name">Nome do personagem</label>
+        <input id="name" type="text" placeholder="Ex.: Akane">
+    </div>
+
+    <div class="field">
+        <label for="work">Obra / coleção</label>
+
+        <select id="work">
+
+            <option>Um Casamento Político</option>
+            <option>Gotei 13</option>
+            <option>Enid a Garota Lobo</option>
+            <option>Academia Anthigonus</option>
+            <option>As Chamas sob a Coroa</option>
+            <option>Entre a Luz e as Sombras</option>
+            <option>Outros</option>
+
+        </select>
+    </div>
+
+    <div class="field other-work" id="otherWorkField">
+
+        <label for="otherWork">Nome da obra</label>
+
+        <input
+            id="otherWork"
+            type="text"
+            placeholder="Digite o nome da obra"
+        >
+
+    </div>
+
+    <div class="field">
+        <label for="image">Imagem do personagem</label>
+        <input id="image" type="file" accept="image/*">
+    </div>
+
+    <div class="field">
+
+        <label>Atributos</label>
+
+        <div class="stats">
+
+            <div class="stat">
+                <label for="atk">ATK</label>
+                <input id="atk" type="number" min="0" max="999" value="0">
+            </div>
+
+            <div class="stat">
+                <label for="def">DEF</label>
+                <input id="def" type="number" min="0" max="999" value="0">
+            </div>
+
+            <div class="stat">
+                <label for="mana">MANA</label>
+                <input id="mana" type="number" min="0" max="99" value="0">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="field">
+
+        <label for="ability">
+            Descrição da habilidade
+        </label>
+
+        <textarea
+            id="ability"
+            placeholder="Descreva o efeito ou habilidade desta carta..."
+        ></textarea>
+
+    </div>
+
+    <div class="buttons">
+
+        <button
+            id="resetBtn"
+            class="btn-secondary"
+            type="button"
+        >
+            Restaurar
+        </button>
+
+        <button
+            id="downloadBtn"
+            class="btn-secondary"
+            type="button"
+        >
+            Baixar PNG
+        </button>
+
+    </div>
+
+    <button
+        id="addAlbumBtn"
+        class="btn-primary"
+        type="button"
+        style="width:100%;margin-top:10px;"
+    >
+        Adicionar ao álbum
+    </button>
+
+    <button
+        id="viewAlbumBtn"
+        class="btn-album"
+        type="button"
+    >
+        Abrir álbum completo
+    </button>
+
+</section>
+
+<section class="preview-area">
+
+    <div class="canvas-wrapper">
+
+        <canvas
+            id="cardCanvas"
+            width="900"
+            height="1350"
+        ></canvas>
+
+    </div>
+
+</section>
+
+</main>
+
+<section class="recent-section" id="recentes">
+
+    <div class="recent-heading">
+
+        <div class="eyebrow">Últimas criações</div>
+
+        <h2>Cartas recentes</h2>
+
+        <p>
+            As cartas salvas neste navegador aparecem aqui.
+        </p>
+
+    </div>
+
+    <div
+        class="recent-grid"
+        id="recentGrid"
+    ></div>
+
+</section>
+
+<div
+    class="card-modal"
+    id="cardModal"
+    aria-hidden="true"
+>
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            id="modalClose"
+            type="button"
+        >
+            ×
+        </button>
+
+        <img
+            class="modal-image"
+            id="modalImage"
+            alt="Carta ampliada"
+        >
+
+    </div>
+
+</div>
+
+<footer class="site-footer">
+
+    <div class="footer-line"></div>
+
+    <p class="footer-main">
+        Um Mundo <span>Além das Páginas</span>
+        — Onde cada história leva a um novo mundo.
+    </p>
+
+    <p class="copyright">
+        © 2026 D. Cavalcanttih. Todos os direitos reservados.
+    </p>
+
+</footer>
+
+<script>
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const canvas =
+    document.getElementById("cardCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const nameInput =
+    document.getElementById("name");
+
+const workInput =
+    document.getElementById("work");
+
+const otherWorkInput =
+    document.getElementById("otherWork");
+
+const otherWorkField =
+    document.getElementById("otherWorkField");
+
+const imageInput =
+    document.getElementById("image");
+
+const atkInput =
+    document.getElementById("atk");
+
+const defInput =
+    document.getElementById("def");
+
+const manaInput =
+    document.getElementById("mana");
+
+const abilityInput =
+    document.getElementById("ability");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const addAlbumBtn =
+    document.getElementById("addAlbumBtn");
+
+const viewAlbumBtn =
+    document.getElementById("viewAlbumBtn");
+
+const recentGrid =
+    document.getElementById("recentGrid");
+
+const cardModal =
+    document.getElementById("cardModal");
+
+const modalImage =
+    document.getElementById("modalImage");
+
+const modalClose =
+    document.getElementById("modalClose");
+
+
+/* =========================================================
+   BANCO
+========================================================= */
+
+const DB_NAME =
+    "UmMundoAlemDasPaginasAlbum";
+
+const DB_VERSION = 2;
+
+const CARD_STORE =
+    "cards";
+
+const COLLECTION_STORE =
+    "collections";
+
+let albumDB = null;
+let albumDBPromise = null;
+
+
+function resetDatabaseConnection() {
+
+    if (albumDB) {
+
+        try {
+            albumDB.close();
+
+        } catch (error) {
+            console.warn(error);
+        }
+
+    }
+
+    albumDB = null;
+    albumDBPromise = null;
+}
+
+
+function openAlbumDatabase() {
+
+    if (albumDB) {
+        return Promise.resolve(albumDB);
+    }
+
+    if (albumDBPromise) {
+        return albumDBPromise;
+    }
+
+    albumDBPromise =
+        new Promise((resolve, reject) => {
+
+            const request =
+                indexedDB.open(
+                    DB_NAME,
+                    DB_VERSION
+                );
+
+            request.onupgradeneeded =
+                event => {
+
+                    const db =
+                        event.target.result;
+
+                    if (!db.objectStoreNames.contains(CARD_STORE)) {
+
+                        db.createObjectStore(
+                            CARD_STORE,
+                            {
+                                keyPath: "id",
+                                autoIncrement: true
+                            }
+                        );
+
+                    }
+
+                    if (!db.objectStoreNames.contains(COLLECTION_STORE)) {
+
+                        db.createObjectStore(
+                            COLLECTION_STORE,
+                            {
+                                keyPath: "id",
+                                autoIncrement: true
+                            }
+                        );
+
+                    }
+
+                };
+
+            request.onsuccess =
+                event => {
+
+                    albumDB =
+                        event.target.result;
+
+                    albumDB.onversionchange =
+                        () => {
+                            albumDB.close();
+                            albumDB = null;
+                            albumDBPromise = null;
+                        };
+
+                    resolve(albumDB);
+
+                };
+
+            request.onerror =
+                () => {
+                    albumDBPromise = null;
+                    reject(request.error);
+                };
+
+        });
+
+    return albumDBPromise;
+}
+
+
+function runDatabaseOperation(operation) {
+
+    return new Promise(
+        async (resolve, reject) => {
+
+            try {
+
+                const database =
+                    await openAlbumDatabase();
+
+                const result =
+                    await operation(database);
+
+                resolve(result);
+
+            } catch (error) {
+
+                reject(error);
+
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SALVAR
+========================================================= */
+
+function saveCardToAlbum(card) {
+
+    return runDatabaseOperation(
+        database => {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    const transaction =
+                        database.transaction(
+                            CARD_STORE,
+                            "readwrite"
+                        );
+
+                    const store =
+                        transaction.objectStore(
+                            CARD_STORE
+                        );
+
+                    const request =
+                        store.add(card);
+
+                    request.onsuccess =
+                        () => {
+                            resolve(request.result);
+                        };
+
+                    request.onerror =
+                        () => {
+                            reject(request.error);
+                        };
+
+                }
+            );
+
+        }
+    );
+}
+
+
+function getAlbumCards() {
+
+    return runDatabaseOperation(
+        database => {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    const transaction =
+                        database.transaction(
+                            CARD_STORE,
+                            "readonly"
+                        );
+
+                    const store =
+                        transaction.objectStore(
+                            CARD_STORE
+                        );
+
+                    const request =
+                        store.getAll();
+
+                    request.onsuccess =
+                        () => {
+                            resolve(
+                                request.result || []
+                            );
+                        };
+
+                    request.onerror =
+                        () => {
+                            reject(request.error);
+                        };
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   OBRA
+========================================================= */
+
+function getSelectedWork() {
+
+    if (workInput.value === "Outros") {
+
+        return (
+            otherWorkInput.value.trim() ||
+            "Coleção de personagens"
+        );
+
+    }
+
+    return workInput.value;
+}
+
+
+workInput.addEventListener(
+    "change",
+    () => {
+
+        if (workInput.value === "Outros") {
+
+            otherWorkField.classList.add(
+                "visible"
+            );
+
+        } else {
+
+            otherWorkField.classList.remove(
+                "visible"
+            );
+
+        }
+
+        draw();
+
+    }
+);
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
+let characterImage =
+    new Image();
+
+characterImage.crossOrigin =
+    "anonymous";
+
+characterImage.onload =
+    draw;
+
+characterImage.onerror =
+    draw;
+
+characterImage.src =
+    "https://i.postimg.cc/cJ893vgm/AP1Gcz-NTm-Xz4F3qrkp-LQuhwdg-Ye4do-Og.png";
+
+
+imageInput.addEventListener(
+    "change",
+    event => {
+
+        const file =
+            event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const reader =
+            new FileReader();
+
+        reader.onload =
+            event => {
+
+                characterImage =
+                    new Image();
+
+                characterImage.onload =
+                    draw;
+
+                characterImage.src =
+                    event.target.result;
+
+            };
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+/* =========================================================
+   DESENHO
+========================================================= */
+
+function roundedRect(
+    context,
+    x,
+    y,
+    width,
+    height,
+    radius
+) {
+
+    context.beginPath();
+
+    context.moveTo(
+        x + radius,
+        y
+    );
+
+    context.lineTo(
+        x + width - radius,
+        y
+    );
+
+    context.quadraticCurveTo(
+        x + width,
+        y,
+        x + width,
+        y + radius
+    );
+
+    context.lineTo(
+        x + width,
+        y + height - radius
+    );
+
+    context.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - radius,
+        y + height
+    );
+
+    context.lineTo(
+        x + radius,
+        y + height
+    );
+
+    context.quadraticCurveTo(
+        x,
+        y + height,
+        x,
+        y + height - radius
+    );
+
+    context.lineTo(
+        x,
+        y + radius
+    );
+
+    context.quadraticCurveTo(
+        x,
+        y,
+        x + radius,
+        y
+    );
+
+    context.closePath();
+}
+
+
+function drawStat(
+    label,
+    value,
+    x,
+    y
+) {
+
+    ctx.save();
+
+    ctx.fillStyle =
+        "rgba(17,17,31,.90)";
+
+    ctx.strokeStyle =
+        "#c9a227";
+
+    ctx.lineWidth = 3;
+
+    roundedRect(
+        ctx,
+        x,
+        y,
+        190,
+        78,
+        18
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillStyle =
+        "#c9a227";
+
+    ctx.font =
+        "bold 20px Montserrat, sans-serif";
+
+    ctx.fillText(
+        label,
+        x + 95,
+        y + 25
+    );
+
+    ctx.fillStyle =
+        "#f8f2df";
+
+    ctx.font =
+        "bold 29px Montserrat, sans-serif";
+
+    ctx.fillText(
+        value,
+        x + 95,
+        y + 53
+    );
+
+    ctx.restore();
+}
+
+
+function draw() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* FUNDO */
+
+    const background =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            canvas.height
+        );
+
+    background.addColorStop(
+        0,
+        "#17151f"
+    );
+
+    background.addColorStop(
+        1,
+        "#08080d"
+    );
+
+    ctx.fillStyle =
+        background;
+
+    roundedRect(
+        ctx,
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+        28
+    );
+
+    ctx.fill();
+
+
+    /* IMAGEM */
+
+    if (
+        characterImage.complete &&
+        characterImage.naturalWidth > 0
+    ) {
+
+        const imgWidth =
+            characterImage.naturalWidth;
+
+        const imgHeight =
+            characterImage.naturalHeight;
+
+        const scale =
+            Math.max(
+                canvas.width / imgWidth,
+                canvas.height / imgHeight
+            ) * .78;
+
+        const drawWidth =
+            imgWidth * scale;
+
+        const drawHeight =
+            imgHeight * scale;
+
+        const offsetX =
+            (canvas.width - drawWidth) / 2;
+
+        const offsetY =
+            (canvas.height - drawHeight) / 2;
+
+        ctx.save();
+
+        roundedRect(
+            ctx,
+            0,
+            0,
+            canvas.width,
+            canvas.height,
+            28
+        );
+
+        ctx.clip();
+
+        ctx.drawImage(
+            characterImage,
+            offsetX,
+            offsetY,
+            drawWidth,
+            drawHeight
+        );
+
+        ctx.restore();
+
+    }
+
+
+    /* VINHETA */
+
+    const vignette =
+        ctx.createRadialGradient(
+            450,
+            600,
+            100,
+            450,
+            600,
+            700
+        );
+
+    vignette.addColorStop(
+        0,
+        "rgba(0,0,0,0)"
+    );
+
+    vignette.addColorStop(
+        1,
+        "rgba(0,0,0,.72)"
+    );
+
+    ctx.fillStyle =
+        vignette;
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* MOLDURA */
+
+    ctx.strokeStyle =
+        "#c9a227";
+
+    ctx.lineWidth = 7;
+
+    roundedRect(
+        ctx,
+        15,
+        15,
+        canvas.width - 30,
+        canvas.height - 30,
+        28
+    );
+
+    ctx.stroke();
+
+
+    ctx.strokeStyle =
+        "rgba(201,162,39,.4)";
+
+    ctx.lineWidth = 2;
+
+    roundedRect(
+        ctx,
+        28,
+        28,
+        canvas.width - 56,
+        canvas.height - 56,
+        22
+    );
+
+    ctx.stroke();
+
+
+    /* NOME */
+
+    const name =
+        nameInput.value.trim() ||
+        "PERSONAGEM";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.textBaseline =
+        "middle";
+
+    ctx.font =
+        "bold 50px Georgia, serif";
+
+    ctx.fillStyle =
+        "#f0e4c6";
+
+    ctx.shadowColor =
+        "rgba(0,0,0,.9)";
+
+    ctx.shadowBlur = 10;
+
+    ctx.fillText(
+        name.toUpperCase(),
+        450,
+        95
+    );
+
+    ctx.shadowColor =
+        "transparent";
+
+
+    /* ATRIBUTOS */
+
+    drawStat(
+        "ATK",
+        atkInput.value || "0",
+        35,
+        1165
+    );
+
+    drawStat(
+        "DEF",
+        defInput.value || "0",
+        355,
+        1165
+    );
+
+    drawStat(
+        "MANA",
+        manaInput.value || "0",
+        675,
+        1165
+    );
+
+
+    /* OBRA */
+
+    ctx.font =
+        "bold 23px Georgia, serif";
+
+    ctx.fillStyle =
+        "#f0e4c6";
+
+    ctx.fillText(
+        `✦ ${getSelectedWork().toUpperCase()} ✦`,
+        450,
+        1290
+    );
+
+}
+
+
+[
+    nameInput,
+    otherWorkInput,
+    atkInput,
+    defInput,
+    manaInput,
+    abilityInput
+].forEach(
+    element => {
+
+        element.addEventListener(
+            "input",
+            draw
+        );
+
+    }
+);
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+downloadBtn.addEventListener(
+    "click",
+    () => {
+
+        try {
+
+            const link =
+                document.createElement("a");
+
+            link.download =
+                `${nameInput.value.trim() || "personagem"}-carta.png`;
+
+            link.href =
+                canvas.toDataURL(
+                    "image/png"
+                );
+
+            link.click();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Não foi possível gerar o PNG desta carta."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ADICIONAR AO ÁLBUM
+========================================================= */
+
+function canvasToBlob() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            canvas.toBlob(
+                blob => {
+
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(
+                            new Error(
+                                "Não foi possível gerar a imagem."
+                            )
+                        );
+                    }
+
+                },
+                "image/png"
+            );
+
+        }
+    );
+
+}
+
+
+addAlbumBtn.addEventListener(
+    "click",
+    async () => {
+
+        addAlbumBtn.disabled = true;
+
+        const originalText =
+            addAlbumBtn.textContent;
+
+        addAlbumBtn.textContent =
+            "Salvando...";
+
+        try {
+
+            const card = {
+
+                name:
+                    nameInput.value.trim() ||
+                    "Personagem",
+
+                work:
+                    getSelectedWork(),
+
+                image:
+                    await canvasToBlob(),
+
+                /* NOVOS DADOS */
+
+                atk:
+                    Number(atkInput.value) || 0,
+
+                def:
+                    Number(defInput.value) || 0,
+
+                mana:
+                    Number(manaInput.value) || 0,
+
+                ability:
+                    abilityInput.value.trim(),
+
+                createdAt:
+                    Date.now()
+
+            };
+
+
+            const savedId =
+                await saveCardToAlbum(
+                    card
+                );
+
+
+            const cards =
+                await getAlbumCards();
+
+
+            const savedCard =
+                cards.find(
+                    card =>
+                        card.id === savedId
+                );
+
+
+            if (!savedCard) {
+                throw new Error(
+                    "A carta não foi encontrada após o salvamento."
+                );
+            }
+
+
+            await renderRecentCards();
+
+
+            document
+                .getElementById("recentes")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao adicionar carta:",
+                error
+            );
+
+            alert(
+                "Não foi possível adicionar esta carta ao álbum."
+            );
+
+        } finally {
+
+            addAlbumBtn.disabled =
+                false;
+
+            addAlbumBtn.textContent =
+                originalText;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CARTAS RECENTES
+========================================================= */
+
+async function renderRecentCards() {
+
+    recentGrid.innerHTML = "";
+
+    const cards =
+        await getAlbumCards();
+
+    cards.sort(
+        (a,b) =>
+            (b.createdAt || 0) -
+            (a.createdAt || 0)
+    );
+
+    const recent =
+        cards.slice(0,8);
+
+    if (!recent.length) {
+
+        recentGrid.innerHTML = `
+            <div class="recent-empty">
+                <h3>Nenhuma carta criada ainda</h3>
+                <p>
+                    Crie sua primeira carta para começar sua coleção.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    recent.forEach(
+        card => {
+
+            const element =
+                document.createElement("article");
+
+            element.className =
+                "recent-card";
+
+
+            const image =
+                document.createElement("img");
+
+            image.className =
+                "recent-card-image";
+
+            image.alt =
+                card.name || "Carta";
+
+            if (card.image instanceof Blob) {
+
+                image.src =
+                    URL.createObjectURL(
+                        card.image
+                    );
+
+            }
+
+
+            image.addEventListener(
+                "click",
+                () => {
+
+                    modalImage.src =
+                        image.src;
+
+                    cardModal.classList.add(
+                        "visible"
+                    );
+
+                }
+            );
+
+
+            const info =
+                document.createElement("div");
+
+            info.className =
+                "recent-card-info";
+
+            info.innerHTML = `
+                <div class="recent-card-name">
+                    ${escapeHTML(card.name || "Personagem")}
+                </div>
+
+                <div class="recent-card-work">
+                    ${escapeHTML(card.work || "Sem obra")}
+                </div>
+            `;
+
+
+            element.appendChild(image);
+            element.appendChild(info);
+
+            recentGrid.appendChild(element);
+
+        }
+    );
+
+}
+
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+modalClose.addEventListener(
+    "click",
+    () => {
+
+        cardModal.classList.remove(
+            "visible"
+        );
+
+        modalImage.removeAttribute(
+            "src"
+        );
+
+    }
+);
+
+
+cardModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === cardModal
+        ) {
+
+            cardModal.classList.remove(
+                "visible"
+            );
+
+            modalImage.removeAttribute(
+                "src"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESTAURAR
+========================================================= */
+
+resetBtn.addEventListener(
+    "click",
+    () => {
+
+        nameInput.value = "";
+
+        workInput.value =
+            "Um Casamento Político";
+
+        otherWorkInput.value = "";
+
+        otherWorkField.classList.remove(
+            "visible"
+        );
+
+        imageInput.value = "";
+
+        atkInput.value = "0";
+        defInput.value = "0";
+        manaInput.value = "0";
+
+        abilityInput.value = "";
+
+        characterImage =
+            new Image();
+
+        characterImage.crossOrigin =
+            "anonymous";
+
+        characterImage.onload =
+            draw;
+
+        characterImage.onerror =
+            draw;
+
+        characterImage.src =
+            "https://i.postimg.cc/cJ893vgm/AP1Gcz-NTm-Xz4F3qrkp-LQuhwdg-Ye4do-Og.png";
+
+        draw();
+
+    }
+);
+
+
+/* =========================================================
+   ÁLBUM
+========================================================= */
+
+viewAlbumBtn.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "album.html";
+
+    }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+openAlbumDatabase()
+    .then(
+        renderRecentCards
+    )
+    .catch(
+        error =>
+            console.error(error)
+    );
+
+draw();
+
+</script>
+
+</body>
+</html>
+```

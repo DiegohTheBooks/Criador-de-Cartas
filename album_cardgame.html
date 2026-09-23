@@ -1,0 +1,4759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Álbum de Cartas — Um Mundo Além das Páginas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at top,
+                    #24213b 0%,
+                    #171629 45%,
+                    #0f0f1c 100%
+                );
+            color: #f4f1e8;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .site-header {
+            position: relative;
+            z-index: 10;
+
+            width: 100%;
+            padding: 24px 32px;
+
+            background: rgba(15, 15, 28, 0.88);
+            border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+
+            backdrop-filter: blur(10px);
+        }
+
+        .header-inner {
+            max-width: 1500px;
+            margin: 0 auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            color: #f4f1e8;
+            text-decoration: none;
+            font-family: "Playfair Display", serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo span {
+            color: #c9a227;
+        }
+
+        .header-subtitle {
+            color: rgba(244, 241, 232, 0.65);
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        /* =========================================================
+           LAYOUT
+        ========================================================= */
+
+        .page-layout {
+            width: min(1500px, 100%);
+            margin: 0 auto;
+
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+
+            min-height: calc(100vh - 90px);
+        }
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            padding: 30px 22px;
+
+            background: rgba(13, 13, 24, 0.68);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-title {
+            margin-bottom: 15px;
+
+            color: #c9a227;
+            font-family: "Playfair Display", serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .collection-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .collection-button {
+            width: 100%;
+            padding: 11px 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+
+            border: 1px solid transparent;
+            border-radius: 8px;
+
+            background: transparent;
+            color: rgba(244, 241, 232, 0.75);
+
+            text-align: left;
+            transition: 0.2s ease;
+        }
+
+        .collection-button:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+
+        .collection-button.active {
+            background: rgba(201, 162, 39, 0.12);
+            border-color: rgba(201, 162, 39, 0.35);
+            color: #f4f1e8;
+        }
+
+        .collection-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .collection-count {
+            flex-shrink: 0;
+
+            min-width: 25px;
+            padding: 2px 6px;
+
+            border-radius: 20px;
+
+            background: rgba(255, 255, 255, 0.07);
+
+            color: rgba(244, 241, 232, 0.55);
+
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            margin: 24px 0;
+
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .backup-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .backup-button {
+            width: 100%;
+            padding: 10px 12px;
+
+            border: 1px solid rgba(201, 162, 39, 0.25);
+            border-radius: 7px;
+
+            background: rgba(201, 162, 39, 0.06);
+            color: rgba(244, 241, 232, 0.85);
+
+            font-size: 0.78rem;
+            text-align: left;
+
+            transition: 0.2s ease;
+        }
+
+        .backup-button:hover {
+            background: rgba(201, 162, 39, 0.13);
+            border-color: rgba(201, 162, 39, 0.45);
+            color: #fff;
+        }
+
+        .backup-button:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .game-export-note {
+            margin-top: 9px;
+
+            color: rgba(244, 241, 232, 0.45);
+            font-size: 0.68rem;
+            line-height: 1.5;
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main-content {
+            min-width: 0;
+            padding: 35px;
+        }
+
+        .content-heading {
+            margin-bottom: 28px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .content-heading h1 {
+            color: #f4f1e8;
+            font-family: "Playfair Display", serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 600;
+        }
+
+        .content-heading p {
+            margin-top: 5px;
+
+            color: rgba(244, 241, 232, 0.55);
+            font-size: 0.82rem;
+        }
+
+        .card-counter {
+            color: rgba(244, 241, 232, 0.45);
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        /* =========================================================
+           CARDS GRID
+        ========================================================= */
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(180px, 1fr)
+            );
+            gap: 22px;
+        }
+
+        .card-item {
+            position: relative;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+
+            background: #171625;
+
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, 0.25);
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .card-item:hover {
+            transform: translateY(-4px);
+
+            border-color: rgba(201, 162, 39, 0.35);
+
+            box-shadow:
+                0 18px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-image-wrapper {
+            position: relative;
+
+            aspect-ratio: 2 / 3;
+
+            background: #10101b;
+
+            cursor: pointer;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 12px;
+        }
+
+        .card-name {
+            overflow: hidden;
+
+            color: #f4f1e8;
+
+            font-family: "Playfair Display", serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-work {
+            margin-top: 3px;
+
+            overflow: hidden;
+
+            color: rgba(244, 241, 232, 0.5);
+
+            font-size: 0.68rem;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-stats {
+            margin-top: 9px;
+
+            display: flex;
+            gap: 6px;
+        }
+
+        .stat {
+            flex: 1;
+
+            padding: 5px;
+
+            border-radius: 5px;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            color: rgba(244, 241, 232, 0.65);
+
+            font-size: 0.65rem;
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+
+            margin-bottom: 1px;
+
+            color: #c9a227;
+            font-size: 0.72rem;
+        }
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty-state {
+            min-height: 300px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 40px;
+
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+
+            color: rgba(244, 241, 232, 0.45);
+
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            margin-bottom: 15px;
+
+            font-size: 2rem;
+            opacity: 0.45;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 7px;
+
+            color: rgba(244, 241, 232, 0.7);
+
+            font-family: "Playfair Display", serif;
+            font-size: 1.25rem;
+        }
+
+        .empty-state p {
+            max-width: 420px;
+
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+
+            padding: 20px;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(5, 5, 12, 0.82);
+
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            width: min(900px, 100%);
+            max-height: calc(100vh - 40px);
+
+            overflow: auto;
+
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            border-radius: 14px;
+
+            background: #171625;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.55);
+        }
+
+        .modal-header {
+            padding: 17px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .modal-title {
+            color: #f4f1e8;
+
+            font-family: "Playfair Display", serif;
+            font-size: 1.2rem;
+        }
+
+        .close-button {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 0;
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(244, 241, 232, 0.65);
+
+            font-size: 1rem;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* =========================================================
+           CARD VIEWER
+        ========================================================= */
+
+        .viewer-body {
+            padding: 25px;
+
+            display: grid;
+            grid-template-columns: minmax(250px, 360px) minmax(0, 1fr);
+            gap: 30px;
+        }
+
+        .viewer-image-wrapper {
+            width: 100%;
+
+            aspect-ratio: 2 / 3;
+
+            overflow: hidden;
+
+            border-radius: 9px;
+
+            background: #0e0e18;
+        }
+
+        .viewer-image {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+        }
+
+        .viewer-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .viewer-name {
+            color: #f4f1e8;
+
+            font-family: "Playfair Display", serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.15;
+        }
+
+        .viewer-work {
+            margin-top: 6px;
+
+            color: #c9a227;
+            font-size: 0.8rem;
+        }
+
+        .viewer-stats {
+            margin-top: 25px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .viewer-stat {
+            padding: 11px;
+
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 7px;
+
+            background: rgba(255, 255, 255, 0.025);
+
+            text-align: center;
+        }
+
+        .viewer-stat span {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: rgba(244, 241, 232, 0.45);
+
+            font-size: 0.65rem;
+            text-transform: uppercase;
+        }
+
+        .viewer-stat strong {
+            color: #c9a227;
+            font-size: 1rem;
+        }
+
+        .viewer-ability {
+            margin-top: 22px;
+        }
+
+        .viewer-ability-title {
+            margin-bottom: 7px;
+
+            color: #c9a227;
+
+            font-family: "Playfair Display", serif;
+            font-size: 0.95rem;
+        }
+
+        .viewer-ability-text {
+            color: rgba(244, 241, 232, 0.7);
+
+            font-size: 0.78rem;
+            line-height: 1.7;
+
+            white-space: pre-wrap;
+        }
+
+        .viewer-actions {
+            margin-top: auto;
+            padding-top: 25px;
+
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .action-button {
+            padding: 9px 13px;
+
+            border: 1px solid rgba(201, 162, 39, 0.25);
+            border-radius: 6px;
+
+            background: rgba(201, 162, 39, 0.06);
+            color: rgba(244, 241, 232, 0.8);
+
+            font-size: 0.72rem;
+
+            transition: 0.2s ease;
+        }
+
+        .action-button:hover {
+            background: rgba(201, 162, 39, 0.14);
+            border-color: rgba(201, 162, 39, 0.45);
+            color: #fff;
+        }
+
+        .action-button.danger {
+            border-color: rgba(190, 70, 70, 0.3);
+            background: rgba(190, 70, 70, 0.05);
+        }
+
+        .action-button.danger:hover {
+            border-color: rgba(220, 80, 80, 0.5);
+            background: rgba(190, 70, 70, 0.12);
+        }
+
+        /* =========================================================
+           MOVE MODAL
+        ========================================================= */
+
+        .small-modal {
+            width: min(450px, 100%);
+        }
+
+        .small-modal-body {
+            padding: 20px;
+        }
+
+        .small-modal-body p {
+            margin-bottom: 15px;
+
+            color: rgba(244, 241, 232, 0.6);
+
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+        .collection-select {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 7px;
+
+            outline: none;
+
+            background: #10101b;
+            color: #f4f1e8;
+        }
+
+        .small-modal-actions {
+            margin-top: 15px;
+
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .site-footer {
+            padding: 25px 20px;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+            background: rgba(10, 10, 18, 0.65);
+
+            color: rgba(244, 241, 232, 0.4);
+
+            font-size: 0.68rem;
+            text-align: center;
+        }
+
+        .site-footer strong {
+            color: #c9a227;
+            font-weight: 500;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            }
+
+            .collection-list {
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fill,
+                    minmax(160px, 1fr)
+                );
+            }
+
+            .main-content {
+                padding: 25px 18px;
+            }
+
+            .viewer-body {
+                grid-template-columns: 1fr;
+            }
+
+            .viewer-image-wrapper {
+                max-width: 330px;
+                margin: 0 auto;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .site-header {
+                padding: 18px;
+            }
+
+            .header-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .header-subtitle {
+                text-align: left;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+                gap: 12px;
+            }
+
+            .card-info {
+                padding: 9px;
+            }
+
+            .card-stats {
+                gap: 3px;
+            }
+
+            .stat {
+                padding: 4px 2px;
+            }
+
+            .content-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .viewer-body {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         HEADER
+    ========================================================= -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <a
+                href="criador.html"
+                class="logo"
+            >
+                Um Mundo <span>Além das Páginas</span>
+            </a>
+
+            <div class="header-subtitle">
+                Álbum de Cartas
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         LAYOUT
+    ========================================================= -->
+
+    <div class="page-layout">
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside class="sidebar">
+
+
+            <div class="sidebar-section">
+
+                <h2 class="sidebar-title">
+                    Coleções
+                </h2>
+
+                <div
+                    id="collectionList"
+                    class="collection-list"
+                ></div>
+
+            </div>
+
+
+            <div class="sidebar-divider"></div>
+
+
+            <!-- =================================================
+                 GAME EXPORT
+            ================================================== -->
+
+            <div class="sidebar-section">
+
+                <h2 class="sidebar-title">
+                    Game Card
+                </h2>
+
+                <div class="backup-actions">
+
+                    <button
+                        id="exportGameButton"
+                        class="backup-button"
+                        type="button"
+                    >
+                        🎮 Exportar álbum para o game
+                    </button>
+
+                </div>
+
+                <p class="game-export-note">
+                    As imagens são reduzidas para WebP
+                    600×900 com qualidade 70% para gerar
+                    um arquivo mais leve. O backup original
+                    não é alterado.
+                </p>
+
+            </div>
+
+
+            <div class="sidebar-divider"></div>
+
+
+            <!-- =================================================
+                 DADOS
+            ================================================== -->
+
+            <div class="sidebar-section">
+
+                <h2 class="sidebar-title">
+                    Dados
+                </h2>
+
+                <div class="backup-actions">
+
+                    <button
+                        id="exportBackupButton"
+                        class="backup-button"
+                        type="button"
+                    >
+                        💾 Exportar backup
+                    </button>
+
+                    <button
+                        id="importBackupButton"
+                        class="backup-button"
+                        type="button"
+                    >
+                        📥 Importar backup
+                    </button>
+
+                    <input
+                        id="backupFileInput"
+                        type="file"
+                        accept=".json,application/json"
+                        hidden
+                    >
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
+        <main class="main-content">
+
+            <div class="content-heading">
+
+                <div>
+
+                    <h1 id="collectionTitle">
+                        Todas as cartas
+                    </h1>
+
+                    <p id="collectionDescription">
+                        Todas as cartas armazenadas no álbum.
+                    </p>
+
+                </div>
+
+                <div
+                    id="cardCounter"
+                    class="card-counter"
+                >
+                    0 cartas
+                </div>
+
+            </div>
+
+
+            <div
+                id="cardsGrid"
+                class="cards-grid"
+            ></div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="site-footer">
+
+        <strong>Um Mundo Além das Páginas</strong>
+        — Criador de Cartas
+
+    </footer>
+
+
+    <!-- =========================================================
+         CARD VIEWER MODAL
+    ========================================================= -->
+
+    <div
+        id="cardViewerModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h2
+                    id="viewerModalTitle"
+                    class="modal-title"
+                >
+                    Carta
+                </h2>
+
+                <button
+                    id="closeViewer"
+                    class="close-button"
+                    type="button"
+                    aria-label="Fechar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="viewer-body">
+
+
+                <div class="viewer-image-wrapper">
+
+                    <img
+                        id="viewerImage"
+                        class="viewer-image"
+                        alt=""
+                    >
+
+                </div>
+
+
+                <div class="viewer-info">
+
+                    <h1
+                        id="viewerName"
+                        class="viewer-name"
+                    ></h1>
+
+                    <div
+                        id="viewerWork"
+                        class="viewer-work"
+                    ></div>
+
+
+                    <div class="viewer-stats">
+
+                        <div class="viewer-stat">
+
+                            <span>
+                                ATK
+                            </span>
+
+                            <strong id="viewerAtk">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="viewer-stat">
+
+                            <span>
+                                DEF
+                            </span>
+
+                            <strong id="viewerDef">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="viewer-stat">
+
+                            <span>
+                                MANA
+                            </span>
+
+                            <strong id="viewerMana">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="viewer-ability">
+
+                        <div class="viewer-ability-title">
+                            Habilidade
+                        </div>
+
+                        <div
+                            id="viewerAbility"
+                            class="viewer-ability-text"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="viewer-actions">
+
+                        <button
+                            id="downloadCard"
+                            class="action-button"
+                            type="button"
+                        >
+                            ⬇ Baixar carta
+                        </button>
+
+                        <button
+                            id="exportCardJson"
+                            class="action-button"
+                            type="button"
+                        >
+                            🎮 Exportar JSON do game
+                        </button>
+
+                        <button
+                            id="moveCard"
+                            class="action-button"
+                            type="button"
+                        >
+                            📁 Mover
+                        </button>
+
+                        <button
+                            id="deleteCard"
+                            class="action-button danger"
+                            type="button"
+                        >
+                            🗑 Excluir
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         MOVE CARD MODAL
+    ========================================================= -->
+
+    <div
+        id="moveCardModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal small-modal">
+
+            <div class="modal-header">
+
+                <h2 class="modal-title">
+                    Mover carta
+                </h2>
+
+                <button
+                    id="closeMoveModal"
+                    class="close-button"
+                    type="button"
+                    aria-label="Fechar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="small-modal-body">
+
+                <p>
+                    Escolha a coleção para onde deseja
+                    mover esta carta.
+                </p>
+
+                <select
+                    id="collectionSelect"
+                    class="collection-select"
+                ></select>
+
+
+                <div class="small-modal-actions">
+
+                    <button
+                        id="cancelMove"
+                        class="action-button"
+                        type="button"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        id="confirmMove"
+                        class="action-button"
+                        type="button"
+                    >
+                        Mover carta
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================================
+           CONFIGURAÇÃO DO BANCO
+        ========================================================= */
+
+        const DB_NAME =
+            "UmMundoAlemDasPaginasAlbum";
+
+        const DB_VERSION = 2;
+
+        const CARD_STORE = "cards";
+
+        const COLLECTION_STORE = "collections";
+
+
+        /* =========================================================
+           CONFIGURAÇÃO DA EXPORTAÇÃO DO GAME
+        ========================================================= */
+
+        const GAME_IMAGE_WIDTH = 600;
+
+        const GAME_IMAGE_HEIGHT = 900;
+
+        const GAME_IMAGE_QUALITY = 0.70;
+
+
+        /* =========================================================
+           ESTADO
+        ========================================================= */
+
+        let db = null;
+
+        let allCards = [];
+
+        let allCollections = [];
+
+        let currentCollectionId = "all";
+
+        let selectedCard = null;
+
+        let selectedCardId = null;
+
+        let currentObjectUrls = [];
+
+
+        /* =========================================================
+           ELEMENTOS
+        ========================================================= */
+
+        const collectionList =
+            document.getElementById("collectionList");
+
+        const collectionTitle =
+            document.getElementById("collectionTitle");
+
+        const collectionDescription =
+            document.getElementById("collectionDescription");
+
+        const cardCounter =
+            document.getElementById("cardCounter");
+
+        const cardsGrid =
+            document.getElementById("cardsGrid");
+
+
+        /* =========================================================
+           MODAL ELEMENTS
+        ========================================================= */
+
+        const cardViewerModal =
+            document.getElementById("cardViewerModal");
+
+        const moveCardModal =
+            document.getElementById("moveCardModal");
+
+        const viewerImage =
+            document.getElementById("viewerImage");
+
+        const viewerName =
+            document.getElementById("viewerName");
+
+        const viewerWork =
+            document.getElementById("viewerWork");
+
+        const viewerAtk =
+            document.getElementById("viewerAtk");
+
+        const viewerDef =
+            document.getElementById("viewerDef");
+
+        const viewerMana =
+            document.getElementById("viewerMana");
+
+        const viewerAbility =
+            document.getElementById("viewerAbility");
+
+        const viewerModalTitle =
+            document.getElementById("viewerModalTitle");
+
+
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
+
+        const exportGameButton =
+            document.getElementById("exportGameButton");
+
+        const exportBackupButton =
+            document.getElementById("exportBackupButton");
+
+        const importBackupButton =
+            document.getElementById("importBackupButton");
+
+        const backupFileInput =
+            document.getElementById("backupFileInput");
+
+        const downloadCardButton =
+            document.getElementById("downloadCard");
+
+        const exportCardJsonButton =
+            document.getElementById("exportCardJson");
+
+        const moveCardButton =
+            document.getElementById("moveCard");
+
+        const deleteCardButton =
+            document.getElementById("deleteCard");
+
+        const closeViewerButton =
+            document.getElementById("closeViewer");
+
+        const closeMoveModalButton =
+            document.getElementById("closeMoveModal");
+
+        const cancelMoveButton =
+            document.getElementById("cancelMove");
+
+        const confirmMoveButton =
+            document.getElementById("confirmMove");
+
+        const collectionSelect =
+            document.getElementById("collectionSelect");
+
+
+        /* =========================================================
+           DATABASE — RESET CONNECTION
+        ========================================================= */
+
+        function resetDatabaseConnection() {
+
+            try {
+
+                if (db) {
+                    db.close();
+                }
+
+            } catch (error) {
+                console.warn(
+                    "Erro ao fechar conexão:",
+                    error
+                );
+            }
+
+            db = null;
+        }
+
+
+        /* =========================================================
+           DATABASE — OPEN
+        ========================================================= */
+
+        function openAlbumDatabase() {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    if (db) {
+                        resolve(db);
+                        return;
+                    }
+
+                    const request =
+                        indexedDB.open(
+                            DB_NAME,
+                            DB_VERSION
+                        );
+
+
+                    request.onupgradeneeded =
+                        event => {
+
+                            const database =
+                                event.target.result;
+
+
+                            if (
+                                !database.objectStoreNames
+                                    .contains(CARD_STORE)
+                            ) {
+
+                                const cardStore =
+                                    database.createObjectStore(
+                                        CARD_STORE,
+                                        {
+                                            keyPath: "id"
+                                        }
+                                    );
+
+                                cardStore.createIndex(
+                                    "collectionId",
+                                    "collectionId",
+                                    {
+                                        unique: false
+                                    }
+                                );
+
+                            }
+
+
+                            if (
+                                !database.objectStoreNames
+                                    .contains(COLLECTION_STORE)
+                            ) {
+
+                                database.createObjectStore(
+                                    COLLECTION_STORE,
+                                    {
+                                        keyPath: "id"
+                                    }
+                                );
+
+                            }
+
+                        };
+
+
+                    request.onsuccess =
+                        event => {
+
+                            db =
+                                event.target.result;
+
+                            db.onclose = () => {
+                                db = null;
+                            };
+
+                            resolve(db);
+
+                        };
+
+
+                    request.onerror =
+                        () => {
+
+                            reject(
+                                request.error ||
+                                new Error(
+                                    "Não foi possível abrir o banco de dados."
+                                )
+                            );
+
+                        };
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           DATABASE — OPERAÇÃO
+        ========================================================= */
+
+        function runDatabaseOperation(
+            storeNames,
+            mode,
+            operation
+        ) {
+
+            return new Promise(
+                async (resolve, reject) => {
+
+                    try {
+
+                        const database =
+                            await openAlbumDatabase();
+
+                        const transaction =
+                            database.transaction(
+                                storeNames,
+                                mode
+                            );
+
+                        const stores = {};
+
+                        storeNames.forEach(
+                            storeName => {
+
+                                stores[storeName] =
+                                    transaction.objectStore(
+                                        storeName
+                                    );
+
+                            }
+                        );
+
+
+                        let result;
+
+                        try {
+
+                            result =
+                                operation(
+                                    stores,
+                                    transaction
+                                );
+
+                        } catch (error) {
+
+                            reject(error);
+                            return;
+
+                        }
+
+
+                        transaction.oncomplete =
+                            () => resolve(result);
+
+                        transaction.onerror =
+                            () => {
+
+                                reject(
+                                    transaction.error ||
+                                    new Error(
+                                        "Erro na transação."
+                                    )
+                                );
+
+                            };
+
+                        transaction.onabort =
+                            () => {
+
+                                reject(
+                                    transaction.error ||
+                                    new Error(
+                                        "Transação abortada."
+                                    )
+                                );
+
+                            };
+
+                    } catch (error) {
+
+                        reject(error);
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           GET CARDS
+        ========================================================= */
+
+        async function getCards() {
+
+            return runDatabaseOperation(
+                [CARD_STORE],
+                "readonly",
+                stores => {
+
+                    return new Promise(
+                        (resolve, reject) => {
+
+                            const request =
+                                stores[CARD_STORE]
+                                    .getAll();
+
+                            request.onsuccess =
+                                () => {
+
+                                    resolve(
+                                        request.result || []
+                                    );
+
+                                };
+
+                            request.onerror =
+                                () => {
+
+                                    reject(
+                                        request.error
+                                    );
+
+                                };
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           GET COLLECTIONS
+        ========================================================= */
+
+        async function getCollections() {
+
+            return runDatabaseOperation(
+                [COLLECTION_STORE],
+                "readonly",
+                stores => {
+
+                    return new Promise(
+                        (resolve, reject) => {
+
+                            const request =
+                                stores[COLLECTION_STORE]
+                                    .getAll();
+
+                            request.onsuccess =
+                                () => {
+
+                                    resolve(
+                                        request.result || []
+                                    );
+
+                                };
+
+                            request.onerror =
+                                () => {
+
+                                    reject(
+                                        request.error
+                                    );
+
+                                };
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           CREATE COLLECTION
+        ========================================================= */
+
+        async function createCollection(
+            collection
+        ) {
+
+            return runDatabaseOperation(
+                [COLLECTION_STORE],
+                "readwrite",
+                stores => {
+
+                    stores[COLLECTION_STORE]
+                        .put(collection);
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           DELETE COLLECTION
+        ========================================================= */
+
+        async function deleteCollection(
+            collectionId
+        ) {
+
+            return runDatabaseOperation(
+                [
+                    COLLECTION_STORE,
+                    CARD_STORE
+                ],
+                "readwrite",
+                stores => {
+
+                    stores[COLLECTION_STORE]
+                        .delete(collectionId);
+
+
+                    const request =
+                        stores[CARD_STORE]
+                            .getAll();
+
+
+                    request.onsuccess =
+                        () => {
+
+                            const cards =
+                                request.result || [];
+
+                            cards.forEach(
+                                card => {
+
+                                    if (
+                                        card.collectionId ===
+                                        collectionId
+                                    ) {
+
+                                        card.collectionId =
+                                            null;
+
+                                        stores[CARD_STORE]
+                                            .put(card);
+
+                                    }
+
+                                }
+                            );
+
+                        };
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           MOVE CARD
+        ========================================================= */
+
+        async function moveCardToCollection(
+            cardId,
+            collectionId
+        ) {
+
+            return runDatabaseOperation(
+                [CARD_STORE],
+                "readwrite",
+                stores => {
+
+                    const request =
+                        stores[CARD_STORE]
+                            .get(cardId);
+
+
+                    request.onsuccess =
+                        () => {
+
+                            const card =
+                                request.result;
+
+                            if (!card) {
+                                return;
+                            }
+
+                            card.collectionId =
+                                collectionId || null;
+
+                            stores[CARD_STORE]
+                                .put(card);
+
+                        };
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           DELETE CARD
+        ========================================================= */
+
+        async function deleteCard(
+            cardId
+        ) {
+
+            return runDatabaseOperation(
+                [CARD_STORE],
+                "readwrite",
+                stores => {
+
+                    stores[CARD_STORE]
+                        .delete(cardId);
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — BLOB TO DATA URL
+        ========================================================= */
+
+        function blobToDataURL(
+            blob
+        ) {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    const reader =
+                        new FileReader();
+
+                    reader.onload =
+                        () => resolve(
+                            reader.result
+                        );
+
+                    reader.onerror =
+                        () => reject(
+                            reader.error ||
+                            new Error(
+                                "Não foi possível ler a imagem."
+                            )
+                        );
+
+                    reader.readAsDataURL(blob);
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — DATA URL TO BLOB
+        ========================================================= */
+
+        function dataURLToBlob(
+            dataURL
+        ) {
+
+            const parts =
+                dataURL.split(",");
+
+            if (parts.length !== 2) {
+
+                throw new Error(
+                    "Data URL inválida."
+                );
+
+            }
+
+            const mimeMatch =
+                parts[0].match(
+                    /data:(.*?);base64/
+                );
+
+            const mime =
+                mimeMatch
+                    ? mimeMatch[1]
+                    : "application/octet-stream";
+
+            const binary =
+                atob(parts[1]);
+
+            const length =
+                binary.length;
+
+            const bytes =
+                new Uint8Array(length);
+
+
+            for (
+                let index = 0;
+                index < length;
+                index++
+            ) {
+
+                bytes[index] =
+                    binary.charCodeAt(index);
+
+            }
+
+
+            return new Blob(
+                [bytes],
+                {
+                    type: mime
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — LOAD IMAGE ELEMENT
+        ========================================================= */
+
+        function loadImage(
+            source
+        ) {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    const image =
+                        new Image();
+
+                    image.onload =
+                        () => resolve(image);
+
+                    image.onerror =
+                        () => reject(
+                            new Error(
+                                "Não foi possível carregar a imagem."
+                            )
+                        );
+
+                    image.src =
+                        source;
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — DESENHAR CROP PROPORCIONAL
+        ========================================================= */
+
+        function drawImageCover(
+            context,
+            image,
+            targetWidth,
+            targetHeight
+        ) {
+
+            const sourceWidth =
+                image.naturalWidth ||
+                image.width;
+
+            const sourceHeight =
+                image.naturalHeight ||
+                image.height;
+
+
+            if (
+                !sourceWidth ||
+                !sourceHeight
+            ) {
+
+                throw new Error(
+                    "Dimensões da imagem inválidas."
+                );
+
+            }
+
+
+            const sourceRatio =
+                sourceWidth /
+                sourceHeight;
+
+            const targetRatio =
+                targetWidth /
+                targetHeight;
+
+
+            let cropWidth =
+                sourceWidth;
+
+            let cropHeight =
+                sourceHeight;
+
+            let sourceX = 0;
+
+            let sourceY = 0;
+
+
+            if (
+                sourceRatio > targetRatio
+            ) {
+
+                /*
+                 * A imagem é mais larga que a
+                 * proporção da carta.
+                 */
+
+                cropWidth =
+                    sourceHeight *
+                    targetRatio;
+
+                sourceX =
+                    (sourceWidth - cropWidth) /
+                    2;
+
+            } else {
+
+                /*
+                 * A imagem é mais alta que a
+                 * proporção da carta.
+                 */
+
+                cropHeight =
+                    sourceWidth /
+                    targetRatio;
+
+                sourceY =
+                    (sourceHeight - cropHeight) /
+                    2;
+
+            }
+
+
+            context.drawImage(
+                image,
+
+                sourceX,
+                sourceY,
+                cropWidth,
+                cropHeight,
+
+                0,
+                0,
+                targetWidth,
+                targetHeight
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — CANVAS TO WEBP DATA URL
+        ========================================================= */
+
+        function canvasToWebPDataURL(
+            canvas,
+            quality
+        ) {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    canvas.toBlob(
+                        blob => {
+
+                            if (!blob) {
+
+                                reject(
+                                    new Error(
+                                        "O navegador não conseguiu gerar o WebP."
+                                    )
+                                );
+
+                                return;
+                            }
+
+                            blobToDataURL(blob)
+                                .then(resolve)
+                                .catch(reject);
+
+                        },
+                        "image/webp",
+                        quality
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — OTIMIZAR BLOB PARA GAME
+        ========================================================= */
+
+        async function blobToOptimizedGameDataURL(
+            blob
+        ) {
+
+            if (!blob) {
+
+                throw new Error(
+                    "A carta não possui uma imagem."
+                );
+
+            }
+
+
+            const canvas =
+                document.createElement(
+                    "canvas"
+                );
+
+
+            canvas.width =
+                GAME_IMAGE_WIDTH;
+
+            canvas.height =
+                GAME_IMAGE_HEIGHT;
+
+
+            const context =
+                canvas.getContext(
+                    "2d",
+                    {
+                        alpha: false
+                    }
+                );
+
+
+            if (!context) {
+
+                throw new Error(
+                    "Não foi possível criar o canvas."
+                );
+
+            }
+
+
+            /*
+             * createImageBitmap é preferível quando
+             * disponível porque evita algumas etapas
+             * intermediárias de carregamento.
+             */
+
+            if (
+                typeof createImageBitmap ===
+                "function"
+            ) {
+
+                let bitmap = null;
+
+                try {
+
+                    bitmap =
+                        await createImageBitmap(
+                            blob
+                        );
+
+
+                    drawImageCover(
+                        context,
+                        bitmap,
+                        GAME_IMAGE_WIDTH,
+                        GAME_IMAGE_HEIGHT
+                    );
+
+
+                    return await canvasToWebPDataURL(
+                        canvas,
+                        GAME_IMAGE_QUALITY
+                    );
+
+                } finally {
+
+                    if (
+                        bitmap &&
+                        typeof bitmap.close ===
+                        "function"
+                    ) {
+
+                        bitmap.close();
+
+                    }
+
+                }
+
+            }
+
+
+            /*
+             * Fallback para navegadores que não
+             * disponibilizam createImageBitmap.
+             */
+
+            const objectURL =
+                URL.createObjectURL(blob);
+
+
+            try {
+
+                const image =
+                    await loadImage(
+                        objectURL
+                    );
+
+
+                drawImageCover(
+                    context,
+                    image,
+                    GAME_IMAGE_WIDTH,
+                    GAME_IMAGE_HEIGHT
+                );
+
+
+                return await canvasToWebPDataURL(
+                    canvas,
+                    GAME_IMAGE_QUALITY
+                );
+
+            } finally {
+
+                URL.revokeObjectURL(
+                    objectURL
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           IMAGE — OTIMIZAR QUALQUER FONTE
+        ========================================================= */
+
+        async function optimizeImageForGame(
+            imageSource
+        ) {
+
+            if (!imageSource) {
+
+                throw new Error(
+                    "A carta não possui uma imagem."
+                );
+
+            }
+
+
+            /*
+             * Blob — formato esperado do IndexedDB.
+             */
+
+            if (
+                imageSource instanceof Blob
+            ) {
+
+                return blobToOptimizedGameDataURL(
+                    imageSource
+                );
+
+            }
+
+
+            /*
+             * ArrayBuffer / Uint8Array.
+             */
+
+            if (
+                imageSource instanceof ArrayBuffer ||
+                imageSource instanceof Uint8Array
+            ) {
+
+                const blob =
+                    new Blob(
+                        [imageSource]
+                    );
+
+                return blobToOptimizedGameDataURL(
+                    blob
+                );
+
+            }
+
+
+            /*
+             * Data URL.
+             */
+
+            if (
+                typeof imageSource === "string" &&
+                imageSource.startsWith("data:")
+            ) {
+
+                const blob =
+                    dataURLToBlob(
+                        imageSource
+                    );
+
+                return blobToOptimizedGameDataURL(
+                    blob
+                );
+
+            }
+
+
+            /*
+             * URL.
+             *
+             * Isso é mantido como fallback para cartas
+             * antigas ou estruturas externas.
+             */
+
+            if (
+                typeof imageSource === "string"
+            ) {
+
+                const image =
+                    await loadImage(
+                        imageSource
+                    );
+
+
+                const canvas =
+                    document.createElement(
+                        "canvas"
+                    );
+
+
+                canvas.width =
+                    GAME_IMAGE_WIDTH;
+
+                canvas.height =
+                    GAME_IMAGE_HEIGHT;
+
+
+                const context =
+                    canvas.getContext(
+                        "2d",
+                        {
+                            alpha: false
+                        }
+                    );
+
+
+                if (!context) {
+
+                    throw new Error(
+                        "Não foi possível criar o canvas."
+                    );
+
+                }
+
+
+                drawImageCover(
+                    context,
+                    image,
+                    GAME_IMAGE_WIDTH,
+                    GAME_IMAGE_HEIGHT
+                );
+
+
+                return canvasToWebPDataURL(
+                    canvas,
+                    GAME_IMAGE_QUALITY
+                );
+
+            }
+
+
+            throw new Error(
+                "Formato de imagem não suportado."
+            );
+
+        }
+
+
+        /* =========================================================
+           IMAGE — FONTE PARA VISUALIZAÇÃO
+        ========================================================= */
+
+        function getCardImageSource(
+            image
+        ) {
+
+            if (!image) {
+                return null;
+            }
+
+
+            if (
+                typeof image === "string"
+            ) {
+
+                return image;
+
+            }
+
+
+            if (
+                image instanceof Blob
+            ) {
+
+                const url =
+                    URL.createObjectURL(
+                        image
+                    );
+
+                currentObjectUrls.push(
+                    url
+                );
+
+                return url;
+
+            }
+
+
+            return null;
+
+        }
+
+
+        /* =========================================================
+           IMAGE — LIMPAR OBJECT URLS
+        ========================================================= */
+
+        function revokeAlbumObjectUrls() {
+
+            currentObjectUrls.forEach(
+                url => {
+
+                    try {
+
+                        URL.revokeObjectURL(
+                            url
+                        );
+
+                    } catch (error) {
+                        console.warn(error);
+                    }
+
+                }
+            );
+
+            currentObjectUrls = [];
+
+        }
+
+
+        /* =========================================================
+           RENDER COLLECTIONS
+        ========================================================= */
+
+        function renderCollections() {
+
+            collectionList.innerHTML = "";
+
+
+            const createCollectionButton =
+                document.createElement(
+                    "button"
+                );
+
+            createCollectionButton.type =
+                "button";
+
+            createCollectionButton.className =
+                "collection-button";
+
+            createCollectionButton.innerHTML = `
+                <span class="collection-name">
+                    + Nova coleção
+                </span>
+            `;
+
+
+            createCollectionButton.addEventListener(
+                "click",
+                async () => {
+
+                    const name =
+                        prompt(
+                            "Nome da nova coleção:"
+                        );
+
+                    if (!name) {
+                        return;
+                    }
+
+                    const trimmedName =
+                        name.trim();
+
+                    if (!trimmedName) {
+                        return;
+                    }
+
+
+                    const collection = {
+
+                        id:
+                            "collection-" +
+                            Date.now() +
+                            "-" +
+                            Math.random()
+                                .toString(36)
+                                .slice(2),
+
+                        name:
+                            trimmedName,
+
+                        createdAt:
+                            Date.now()
+
+                    };
+
+
+                    try {
+
+                        await createCollection(
+                            collection
+                        );
+
+                        await refreshData();
+
+                        currentCollectionId =
+                            collection.id;
+
+                        renderCollections();
+                        renderCards();
+
+                    } catch (error) {
+
+                        console.error(error);
+
+                        alert(
+                            "Não foi possível criar a coleção."
+                        );
+
+                    }
+
+                }
+            );
+
+
+            collectionList.appendChild(
+                createCollectionButton
+            );
+
+
+            const allButton =
+                document.createElement(
+                    "button"
+                );
+
+            allButton.type =
+                "button";
+
+            allButton.className =
+                "collection-button" +
+                (
+                    currentCollectionId ===
+                    "all"
+                        ? " active"
+                        : ""
+                );
+
+
+            allButton.innerHTML = `
+                <span class="collection-name">
+                    Todas as cartas
+                </span>
+
+                <span class="collection-count">
+                    ${allCards.length}
+                </span>
+            `;
+
+
+            allButton.addEventListener(
+                "click",
+                () => {
+
+                    currentCollectionId =
+                        "all";
+
+                    renderCollections();
+                    renderCards();
+
+                }
+            );
+
+
+            collectionList.appendChild(
+                allButton
+            );
+
+
+            const withoutCollectionCount =
+                allCards.filter(
+                    card =>
+                        !card.collectionId
+                ).length;
+
+
+            const withoutButton =
+                document.createElement(
+                    "button"
+                );
+
+            withoutButton.type =
+                "button";
+
+            withoutButton.className =
+                "collection-button" +
+                (
+                    currentCollectionId ===
+                    "none"
+                        ? " active"
+                        : ""
+                );
+
+
+            withoutButton.innerHTML = `
+                <span class="collection-name">
+                    Sem coleção
+                </span>
+
+                <span class="collection-count">
+                    ${withoutCollectionCount}
+                </span>
+            `;
+
+
+            withoutButton.addEventListener(
+                "click",
+                () => {
+
+                    currentCollectionId =
+                        "none";
+
+                    renderCollections();
+                    renderCards();
+
+                }
+            );
+
+
+            collectionList.appendChild(
+                withoutButton
+            );
+
+
+            allCollections
+                .forEach(
+                    collection => {
+
+                        const count =
+                            allCards.filter(
+                                card =>
+                                    card.collectionId ===
+                                    collection.id
+                            ).length;
+
+
+                        const button =
+                            document.createElement(
+                                "button"
+                            );
+
+                        button.type =
+                            "button";
+
+                        button.className =
+                            "collection-button" +
+                            (
+                                currentCollectionId ===
+                                collection.id
+                                    ? " active"
+                                    : ""
+                            );
+
+
+                        button.innerHTML = `
+                            <span class="collection-name">
+                                ${escapeHTML(
+                                    collection.name
+                                )}
+                            </span>
+
+                            <span class="collection-count">
+                                ${count}
+                            </span>
+                        `;
+
+
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                currentCollectionId =
+                                    collection.id;
+
+                                renderCollections();
+                                renderCards();
+
+                            }
+                        );
+
+
+                        /*
+                         * Clique direito:
+                         * excluir coleção.
+                         *
+                         * As cartas permanecem no álbum
+                         * e ficam sem coleção.
+                         */
+
+                        button.addEventListener(
+                            "contextmenu",
+                            async event => {
+
+                                event.preventDefault();
+
+
+                                const confirmed =
+                                    confirm(
+                                        `Excluir a coleção "${collection.name}"?\n\nAs cartas não serão excluídas. Elas ficarão sem coleção.`
+                                    );
+
+
+                                if (!confirmed) {
+                                    return;
+                                }
+
+
+                                try {
+
+                                    await deleteCollection(
+                                        collection.id
+                                    );
+
+
+                                    if (
+                                        currentCollectionId ===
+                                        collection.id
+                                    ) {
+
+                                        currentCollectionId =
+                                            "all";
+
+                                    }
+
+
+                                    await refreshData();
+
+                                    renderCollections();
+                                    renderCards();
+
+                                } catch (error) {
+
+                                    console.error(error);
+
+                                    alert(
+                                        "Não foi possível excluir a coleção."
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                        collectionList.appendChild(
+                            button
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================================
+           RENDER CARDS
+        ========================================================= */
+
+        function renderCards() {
+
+            revokeAlbumObjectUrls();
+
+            cardsGrid.innerHTML = "";
+
+
+            let filteredCards;
+
+
+            if (
+                currentCollectionId ===
+                "all"
+            ) {
+
+                filteredCards =
+                    allCards;
+
+                collectionTitle.textContent =
+                    "Todas as cartas";
+
+                collectionDescription.textContent =
+                    "Todas as cartas armazenadas no álbum.";
+
+            } else if (
+                currentCollectionId ===
+                "none"
+            ) {
+
+                filteredCards =
+                    allCards.filter(
+                        card =>
+                            !card.collectionId
+                    );
+
+                collectionTitle.textContent =
+                    "Sem coleção";
+
+                collectionDescription.textContent =
+                    "Cartas que ainda não pertencem a uma coleção.";
+
+            } else {
+
+                filteredCards =
+                    allCards.filter(
+                        card =>
+                            card.collectionId ===
+                            currentCollectionId
+                    );
+
+
+                const collection =
+                    allCollections.find(
+                        item =>
+                            item.id ===
+                            currentCollectionId
+                    );
+
+
+                collectionTitle.textContent =
+                    collection
+                        ? collection.name
+                        : "Coleção";
+
+
+                collectionDescription.textContent =
+                    "Cartas desta coleção.";
+
+            }
+
+
+            cardCounter.textContent =
+                `${filteredCards.length} ${
+                    filteredCards.length === 1
+                        ? "carta"
+                        : "cartas"
+                }`;
+
+
+            if (
+                filteredCards.length ===
+                0
+            ) {
+
+                const empty =
+                    document.createElement(
+                        "div"
+                    );
+
+                empty.className =
+                    "empty-state";
+
+                empty.innerHTML = `
+                    <div class="empty-state-icon">
+                        🃏
+                    </div>
+
+                    <h2>
+                        Nenhuma carta encontrada
+                    </h2>
+
+                    <p>
+                        Esta seção ainda não possui cartas.
+                    </p>
+                `;
+
+
+                cardsGrid.appendChild(
+                    empty
+                );
+
+                return;
+
+            }
+
+
+            filteredCards.forEach(
+                card => {
+
+                    const item =
+                        document.createElement(
+                            "article"
+                        );
+
+                    item.className =
+                        "card-item";
+
+
+                    const imageWrapper =
+                        document.createElement(
+                            "div"
+                        );
+
+                    imageWrapper.className =
+                        "card-image-wrapper";
+
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+                    image.className =
+                        "card-image";
+
+                    image.alt =
+                        card.name ||
+                        "Carta";
+
+
+                    const source =
+                        getCardImageSource(
+                            card.image
+                        );
+
+
+                    if (source) {
+                        image.src = source;
+                    }
+
+
+                    imageWrapper.appendChild(
+                        image
+                    );
+
+
+                    imageWrapper.addEventListener(
+                        "click",
+                        () => {
+
+                            openCardViewer(
+                                card
+                            );
+
+                        }
+                    );
+
+
+                    const info =
+                        document.createElement(
+                            "div"
+                        );
+
+                    info.className =
+                        "card-info";
+
+
+                    const name =
+                        document.createElement(
+                            "div"
+                        );
+
+                    name.className =
+                        "card-name";
+
+                    name.textContent =
+                        card.name ||
+                        "Sem nome";
+
+
+                    const work =
+                        document.createElement(
+                            "div"
+                        );
+
+                    work.className =
+                        "card-work";
+
+                    work.textContent =
+                        card.work ||
+                        "Sem obra";
+
+
+                    const stats =
+                        document.createElement(
+                            "div"
+                        );
+
+                    stats.className =
+                        "card-stats";
+
+
+                    stats.innerHTML = `
+                        <div class="stat">
+                            <strong>
+                                ${escapeHTML(
+                                    String(
+                                        Number(card.atk) || 0
+                                    )
+                                )}
+                            </strong>
+                            ATK
+                        </div>
+
+                        <div class="stat">
+                            <strong>
+                                ${escapeHTML(
+                                    String(
+                                        Number(card.def) || 0
+                                    )
+                                )}
+                            </strong>
+                            DEF
+                        </div>
+
+                        <div class="stat">
+                            <strong>
+                                ${escapeHTML(
+                                    String(
+                                        Number(card.mana) || 0
+                                    )
+                                )}
+                            </strong>
+                            MANA
+                        </div>
+                    `;
+
+
+                    info.appendChild(
+                        name
+                    );
+
+                    info.appendChild(
+                        work
+                    );
+
+                    info.appendChild(
+                        stats
+                    );
+
+
+                    item.appendChild(
+                        imageWrapper
+                    );
+
+                    item.appendChild(
+                        info
+                    );
+
+
+                    cardsGrid.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           OPEN CARD VIEWER
+        ========================================================= */
+
+        function openCardViewer(
+            card
+        ) {
+
+            selectedCard =
+                card;
+
+            selectedCardId =
+                card.id;
+
+
+            viewerModalTitle.textContent =
+                card.name ||
+                "Carta";
+
+
+            viewerName.textContent =
+                card.name ||
+                "Sem nome";
+
+
+            viewerWork.textContent =
+                card.work ||
+                "Sem obra";
+
+
+            viewerAtk.textContent =
+                Number(card.atk) ||
+                0;
+
+
+            viewerDef.textContent =
+                Number(card.def) ||
+                0;
+
+
+            viewerMana.textContent =
+                Number(card.mana) ||
+                0;
+
+
+            viewerAbility.textContent =
+                card.ability ||
+                "Nenhuma habilidade cadastrada.";
+
+
+            const imageSource =
+                getCardImageSource(
+                    card.image
+                );
+
+
+            if (imageSource) {
+
+                viewerImage.src =
+                    imageSource;
+
+                viewerImage.alt =
+                    card.name ||
+                    "Carta";
+
+            } else {
+
+                viewerImage.removeAttribute(
+                    "src"
+                );
+
+                viewerImage.alt =
+                    "Imagem indisponível";
+
+            }
+
+
+            cardViewerModal.classList.add(
+                "open"
+            );
+
+            document.body.classList.add(
+                "modal-open"
+            );
+
+        }
+
+
+        /* =========================================================
+           CLOSE CARD VIEWER
+        ========================================================= */
+
+        function closeCardViewer() {
+
+            cardViewerModal.classList.remove(
+                "open"
+            );
+
+            selectedCard =
+                null;
+
+            selectedCardId =
+                null;
+
+            document.body.classList.remove(
+                "modal-open"
+            );
+
+        }
+
+
+        /* =========================================================
+           DOWNLOAD CARD
+        ========================================================= */
+
+        function downloadCardImage() {
+
+            if (!selectedCard) {
+                return;
+            }
+
+
+            if (!selectedCard.image) {
+
+                alert(
+                    "Esta carta não possui uma imagem."
+                );
+
+                return;
+
+            }
+
+
+            const source =
+                getCardImageSource(
+                    selectedCard.image
+                );
+
+
+            if (!source) {
+
+                alert(
+                    "Não foi possível acessar a imagem."
+                );
+
+                return;
+
+            }
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                source;
+
+            link.download =
+                sanitizeFilename(
+                    selectedCard.name ||
+                    "carta"
+                ) +
+                ".png";
+
+
+            document.body.appendChild(
+                link
+            );
+
+            link.click();
+
+            link.remove();
+
+        }
+
+
+        /* =========================================================
+           DOWNLOAD TEXT FILE
+        ========================================================= */
+
+        function downloadTextFile(
+            filename,
+            textContent
+        ) {
+
+            const blob =
+                new Blob(
+                    [textContent],
+                    {
+                        type:
+                            "application/json;charset=utf-8"
+                    }
+                );
+
+
+            const url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                url;
+
+            link.download =
+                filename;
+
+
+            document.body.appendChild(
+                link
+            );
+
+            link.click();
+
+            link.remove();
+
+
+            setTimeout(
+                () => {
+
+                    URL.revokeObjectURL(
+                        url
+                    );
+
+                },
+                1000
+            );
+
+        }
+
+
+        /* =========================================================
+           EXPORTAR CARTA INDIVIDUAL PARA GAME
+        ========================================================= */
+
+        async function exportSelectedCardJSON() {
+
+            if (!selectedCard) {
+                return;
+            }
+
+
+            if (!selectedCard.image) {
+
+                alert(
+                    "Esta carta não possui uma imagem."
+                );
+
+                return;
+
+            }
+
+
+            const originalText =
+                exportCardJsonButton.textContent;
+
+
+            exportCardJsonButton.disabled =
+                true;
+
+            exportCardJsonButton.textContent =
+                "⏳ Preparando...";
+
+
+            try {
+
+                const optimizedImage =
+                    await optimizeImageForGame(
+                        selectedCard.image
+                    );
+
+
+                const exportData = {
+
+                    format:
+                        "Um Mundo Além das Páginas — Game Card",
+
+                    gameVersion:
+                        1,
+
+                    exportedAt:
+                        Date.now(),
+
+                    image: {
+
+                        format:
+                            "webp",
+
+                        width:
+                            GAME_IMAGE_WIDTH,
+
+                        height:
+                            GAME_IMAGE_HEIGHT,
+
+                        quality:
+                            GAME_IMAGE_QUALITY
+
+                    },
+
+                    card: {
+
+                        id:
+                            selectedCard.id,
+
+                        name:
+                            selectedCard.name,
+
+                        work:
+                            selectedCard.work,
+
+                        atk:
+                            Number(
+                                selectedCard.atk
+                            ) || 0,
+
+                        def:
+                            Number(
+                                selectedCard.def
+                            ) || 0,
+
+                        mana:
+                            Number(
+                                selectedCard.mana
+                            ) || 0,
+
+                        ability:
+                            selectedCard.ability || "",
+
+                        collectionId:
+                            selectedCard.collectionId ||
+                            null,
+
+                        createdAt:
+                            selectedCard.createdAt ||
+                            null,
+
+                        image:
+                            optimizedImage
+
+                    }
+
+                };
+
+
+                const json =
+                    JSON.stringify(
+                        exportData,
+                        null,
+                        2
+                    );
+
+
+                downloadTextFile(
+                    sanitizeFilename(
+                        selectedCard.name ||
+                        "carta"
+                    ) +
+                    "-game.json",
+                    json
+                );
+
+
+                const sizeMB =
+                    new Blob(
+                        [json]
+                    ).size /
+                    1024 /
+                    1024;
+
+
+                alert(
+                    `Carta exportada para o game com sucesso.\n\n` +
+                    `Imagem: WebP ${GAME_IMAGE_WIDTH}×${GAME_IMAGE_HEIGHT}\n` +
+                    `Qualidade: ${Math.round(
+                        GAME_IMAGE_QUALITY * 100
+                    )}%\n` +
+                    `Tamanho: ${sizeMB.toFixed(2)} MB`
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao exportar carta:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível preparar esta carta para o game.\n\n" +
+                    (
+                        error.message ||
+                        "Erro desconhecido."
+                    )
+                );
+
+            } finally {
+
+                exportCardJsonButton.disabled =
+                    false;
+
+                exportCardJsonButton.textContent =
+                    originalText;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           EXPORTAR ÁLBUM PARA O GAME
+        ========================================================= */
+
+        async function exportGameAlbum() {
+
+            if (
+                !allCards ||
+                allCards.length === 0
+            ) {
+
+                alert(
+                    "Não há cartas para exportar."
+                );
+
+                return;
+
+            }
+
+
+            const originalText =
+                exportGameButton.textContent;
+
+
+            exportGameButton.disabled =
+                true;
+
+
+            try {
+
+                const gameCards = [];
+
+
+                for (
+                    let index = 0;
+                    index < allCards.length;
+                    index++
+                ) {
+
+                    const card =
+                        allCards[index];
+
+
+                    exportGameButton.textContent =
+                        `⏳ Preparando ${index + 1}/${allCards.length}...`;
+
+
+                    if (!card.image) {
+
+                        console.warn(
+                            "Carta sem imagem:",
+                            card.id
+                        );
+
+                        continue;
+
+                    }
+
+
+                    const optimizedImage =
+                        await optimizeImageForGame(
+                            card.image
+                        );
+
+
+                    gameCards.push({
+
+                        id:
+                            card.id,
+
+                        name:
+                            card.name,
+
+                        work:
+                            card.work,
+
+                        atk:
+                            Number(card.atk) || 0,
+
+                        def:
+                            Number(card.def) || 0,
+
+                        mana:
+                            Number(card.mana) || 0,
+
+                        ability:
+                            card.ability || "",
+
+                        collectionId:
+                            card.collectionId ||
+                            null,
+
+                        createdAt:
+                            card.createdAt ||
+                            null,
+
+                        image:
+                            optimizedImage
+
+                    });
+
+                }
+
+
+                const exportData = {
+
+                    format:
+                        "Um Mundo Além das Páginas — Game Card",
+
+                    gameVersion:
+                        1,
+
+                    exportedAt:
+                        Date.now(),
+
+                    image: {
+
+                        format:
+                            "webp",
+
+                        width:
+                            GAME_IMAGE_WIDTH,
+
+                        height:
+                            GAME_IMAGE_HEIGHT,
+
+                        quality:
+                            GAME_IMAGE_QUALITY
+
+                    },
+
+                    collections:
+                        allCollections.map(
+                            collection => ({
+
+                                id:
+                                    collection.id,
+
+                                name:
+                                    collection.name,
+
+                                createdAt:
+                                    collection.createdAt ||
+                                    null
+
+                            })
+                        ),
+
+                    cards:
+                        gameCards
+
+                };
+
+
+                exportGameButton.textContent =
+                    "⏳ Gerando JSON...";
+
+
+                const json =
+                    JSON.stringify(
+                        exportData,
+                        null,
+                        2
+                    );
+
+
+                downloadTextFile(
+                    "album-game-cards.json",
+                    json
+                );
+
+
+                const sizeMB =
+                    new Blob(
+                        [json]
+                    ).size /
+                    1024 /
+                    1024;
+
+
+                const skipped =
+                    allCards.length -
+                    gameCards.length;
+
+
+                let message =
+                    `Álbum exportado para o game com sucesso.\n\n` +
+                    `Cartas exportadas: ${gameCards.length}\n` +
+                    `Tamanho do arquivo: ${sizeMB.toFixed(2)} MB\n\n` +
+                    `Imagens: WebP ${GAME_IMAGE_WIDTH}×${GAME_IMAGE_HEIGHT}\n` +
+                    `Qualidade: ${Math.round(
+                        GAME_IMAGE_QUALITY * 100
+                    )}%`;
+
+
+                if (skipped > 0) {
+
+                    message +=
+                        `\n\nCartas ignoradas por não possuírem imagem: ${skipped}`;
+
+                }
+
+
+                alert(
+                    message
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao exportar álbum para o game:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível exportar o álbum para o game.\n\n" +
+                    (
+                        error.message ||
+                        "Erro desconhecido."
+                    )
+                );
+
+            } finally {
+
+                exportGameButton.disabled =
+                    false;
+
+                exportGameButton.textContent =
+                    originalText;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           EXPORTAR BACKUP ORIGINAL
+        ========================================================= */
+
+        async function exportBackup() {
+
+            if (
+                !allCards ||
+                allCards.length === 0
+            ) {
+
+                alert(
+                    "Não há cartas para fazer backup."
+                );
+
+                return;
+
+            }
+
+
+            exportBackupButton.disabled =
+                true;
+
+            const originalText =
+                exportBackupButton.textContent;
+
+            exportBackupButton.textContent =
+                "⏳ Preparando backup...";
+
+
+            try {
+
+                const backupCards = [];
+
+
+                for (
+                    let index = 0;
+                    index < allCards.length;
+                    index++
+                ) {
+
+                    const card =
+                        allCards[index];
+
+
+                    exportBackupButton.textContent =
+                        `⏳ Backup ${index + 1}/${allCards.length}...`;
+
+
+                    let image = null;
+
+
+                    if (card.image) {
+
+                        if (
+                            card.image instanceof Blob
+                        ) {
+
+                            image =
+                                await blobToDataURL(
+                                    card.image
+                                );
+
+                        } else if (
+                            typeof card.image ===
+                            "string"
+                        ) {
+
+                            image =
+                                card.image;
+
+                        }
+
+                    }
+
+
+                    backupCards.push({
+
+                        id:
+                            card.id,
+
+                        name:
+                            card.name,
+
+                        work:
+                            card.work,
+
+                        atk:
+                            Number(card.atk) || 0,
+
+                        def:
+                            Number(card.def) || 0,
+
+                        mana:
+                            Number(card.mana) || 0,
+
+                        ability:
+                            card.ability || "",
+
+                        createdAt:
+                            card.createdAt ||
+                            null,
+
+                        collectionId:
+                            card.collectionId ||
+                            null,
+
+                        image:
+                            image
+
+                    });
+
+                }
+
+
+                const backupData = {
+
+                    format:
+                        "Um Mundo Além das Páginas — Álbum",
+
+                    backupVersion:
+                        2,
+
+                    database:
+                        DB_NAME,
+
+                    exportedAt:
+                        Date.now(),
+
+                    collections:
+                        allCollections,
+
+                    cards:
+                        backupCards
+
+                };
+
+
+                exportBackupButton.textContent =
+                    "⏳ Gerando JSON...";
+
+
+                const json =
+                    JSON.stringify(
+                        backupData,
+                        null,
+                        2
+                    );
+
+
+                downloadTextFile(
+                    "album-backup.json",
+                    json
+                );
+
+
+                const sizeMB =
+                    new Blob(
+                        [json]
+                    ).size /
+                    1024 /
+                    1024;
+
+
+                alert(
+                    `Backup exportado com sucesso.\n\n` +
+                    `Cartas: ${backupCards.length}\n` +
+                    `Tamanho: ${sizeMB.toFixed(2)} MB\n\n` +
+                    `As imagens originais foram preservadas.`
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao exportar backup:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível exportar o backup.\n\n" +
+                    (
+                        error.message ||
+                        "Erro desconhecido."
+                    )
+                );
+
+            } finally {
+
+                exportBackupButton.disabled =
+                    false;
+
+                exportBackupButton.textContent =
+                    originalText;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           IMPORTAR BACKUP
+        ========================================================= */
+
+        async function importBackup(
+            file
+        ) {
+
+            if (!file) {
+                return;
+            }
+
+
+            try {
+
+                const text =
+                    await file.text();
+
+
+                const backup =
+                    JSON.parse(
+                        text
+                    );
+
+
+                if (
+                    !backup ||
+                    backup.format !==
+                        "Um Mundo Além das Páginas — Álbum"
+                ) {
+
+                    throw new Error(
+                        "Este arquivo não parece ser um backup válido do álbum."
+                    );
+
+                }
+
+
+                if (
+                    backup.backupVersion !== 1 &&
+                    backup.backupVersion !== 2
+                ) {
+
+                    throw new Error(
+                        "Versão de backup não suportada."
+                    );
+
+                }
+
+
+                if (
+                    !Array.isArray(
+                        backup.cards
+                    )
+                ) {
+
+                    throw new Error(
+                        "O backup não possui uma lista válida de cartas."
+                    );
+
+                }
+
+
+                if (
+                    !Array.isArray(
+                        backup.collections
+                    )
+                ) {
+
+                    throw new Error(
+                        "O backup não possui uma lista válida de coleções."
+                    );
+
+                }
+
+
+                const confirmed =
+                    confirm(
+                        `Importar este backup?\n\n` +
+                        `Cartas: ${backup.cards.length}\n` +
+                        `Coleções: ${backup.collections.length}\n\n` +
+                        `Os dados atuais serão substituídos.`
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                importBackupButton.disabled =
+                    true;
+
+                importBackupButton.textContent =
+                    "⏳ Importando...";
+
+
+                resetDatabaseConnection();
+
+
+                await runDatabaseOperation(
+                    [
+                        CARD_STORE,
+                        COLLECTION_STORE
+                    ],
+                    "readwrite",
+                    stores => {
+
+                        return new Promise(
+                            (resolve, reject) => {
+
+                                try {
+
+                                    /*
+                                     * Limpa os dados atuais.
+                                     */
+
+                                    stores[CARD_STORE]
+                                        .clear();
+
+                                    stores[COLLECTION_STORE]
+                                        .clear();
+
+
+                                    /*
+                                     * Restaura coleções.
+                                     */
+
+                                    backup.collections
+                                        .forEach(
+                                            collection => {
+
+                                                stores[
+                                                    COLLECTION_STORE
+                                                ].put(
+                                                    collection
+                                                );
+
+                                            }
+                                        );
+
+
+                                    /*
+                                     * Restaura cartas.
+                                     */
+
+                                    backup.cards.forEach(
+                                        card => {
+
+                                            const restoredCard =
+                                                {
+                                                    ...card
+                                                };
+
+
+                                            if (
+                                                typeof restoredCard.image ===
+                                                "string" &&
+                                                restoredCard.image.startsWith(
+                                                    "data:"
+                                                )
+                                            ) {
+
+                                                restoredCard.image =
+                                                    dataURLToBlob(
+                                                        restoredCard.image
+                                                    );
+
+                                            }
+
+
+                                            stores[
+                                                CARD_STORE
+                                            ].put(
+                                                restoredCard
+                                            );
+
+                                        }
+                                    );
+
+
+                                    resolve();
+
+                                } catch (error) {
+
+                                    reject(error);
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                await refreshData();
+
+
+                currentCollectionId =
+                    "all";
+
+
+                renderCollections();
+                renderCards();
+
+
+                alert(
+                    "Backup importado com sucesso."
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao importar backup:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível importar o backup.\n\n" +
+                    (
+                        error.message ||
+                        "Arquivo inválido."
+                    )
+                );
+
+            } finally {
+
+                importBackupButton.disabled =
+                    false;
+
+                importBackupButton.textContent =
+                    "📥 Importar backup";
+
+                backupFileInput.value =
+                    "";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           MOVE MODAL
+        ========================================================= */
+
+        function openMoveModal() {
+
+            if (!selectedCard) {
+                return;
+            }
+
+
+            collectionSelect.innerHTML = "";
+
+
+            const noCollectionOption =
+                document.createElement(
+                    "option"
+                );
+
+            noCollectionOption.value =
+                "";
+
+            noCollectionOption.textContent =
+                "Sem coleção";
+
+
+            collectionSelect.appendChild(
+                noCollectionOption
+            );
+
+
+            allCollections.forEach(
+                collection => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        collection.id;
+
+                    option.textContent =
+                        collection.name;
+
+
+                    if (
+                        selectedCard.collectionId ===
+                        collection.id
+                    ) {
+
+                        option.selected =
+                            true;
+
+                    }
+
+
+                    collectionSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            if (
+                !selectedCard.collectionId
+            ) {
+
+                collectionSelect.value =
+                    "";
+
+            }
+
+
+            moveCardModal.classList.add(
+                "open"
+            );
+
+        }
+
+
+        /* =========================================================
+           CLOSE MOVE MODAL
+        ========================================================= */
+
+        function closeMoveModal() {
+
+            moveCardModal.classList.remove(
+                "open"
+            );
+
+        }
+
+
+        /* =========================================================
+           CONFIRM MOVE
+        ========================================================= */
+
+        async function confirmMoveCard() {
+
+            if (!selectedCard) {
+                return;
+            }
+
+
+            const collectionId =
+                collectionSelect.value ||
+                null;
+
+
+            try {
+
+                await moveCardToCollection(
+                    selectedCard.id,
+                    collectionId
+                );
+
+
+                await refreshData();
+
+
+                selectedCard =
+                    allCards.find(
+                        card =>
+                            card.id ===
+                            selectedCardId
+                    ) || null;
+
+
+                renderCollections();
+                renderCards();
+
+
+                closeMoveModal();
+
+                if (selectedCard) {
+
+                    openCardViewer(
+                        selectedCard
+                    );
+
+                } else {
+
+                    closeCardViewer();
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível mover a carta."
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           DELETE SELECTED CARD
+        ========================================================= */
+
+        async function deleteSelectedCard() {
+
+            if (!selectedCard) {
+                return;
+            }
+
+
+            const confirmed =
+                confirm(
+                    `Excluir a carta "${selectedCard.name || "Sem nome"}"?\n\nEssa ação não pode ser desfeita.`
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                await deleteCard(
+                    selectedCard.id
+                );
+
+
+                closeCardViewer();
+
+                await refreshData();
+
+                renderCollections();
+                renderCards();
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível excluir a carta."
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           REFRESH DATA
+        ========================================================= */
+
+        async function refreshData() {
+
+            allCards =
+                await getCards();
+
+            allCollections =
+                await getCollections();
+
+
+            allCards.sort(
+                (a, b) =>
+                    (
+                        Number(b.createdAt) || 0
+                    ) -
+                    (
+                        Number(a.createdAt) || 0
+                    )
+            );
+
+
+            allCollections.sort(
+                (a, b) =>
+                    (
+                        Number(a.createdAt) || 0
+                    ) -
+                    (
+                        Number(b.createdAt) || 0
+                    )
+            );
+
+        }
+
+
+        /* =========================================================
+           ESCAPE HTML
+        ========================================================= */
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================================================
+           SANITIZE FILENAME
+        ========================================================= */
+
+        function sanitizeFilename(
+            value
+        ) {
+
+            return String(
+                value || "arquivo"
+            )
+                .normalize("NFD")
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                )
+                .replace(
+                    /[^a-zA-Z0-9_-]+/g,
+                    "-"
+                )
+                .replace(
+                    /-+/g,
+                    "-"
+                )
+                .replace(
+                    /^-|-$/g,
+                    ""
+                ) ||
+                "arquivo";
+
+        }
+
+
+        /* =========================================================
+           EVENTOS — EXPORTAÇÃO
+        ========================================================= */
+
+        exportGameButton.addEventListener(
+            "click",
+            exportGameAlbum
+        );
+
+
+        exportBackupButton.addEventListener(
+            "click",
+            exportBackup
+        );
+
+
+        importBackupButton.addEventListener(
+            "click",
+            () => {
+
+                backupFileInput.click();
+
+            }
+        );
+
+
+        backupFileInput.addEventListener(
+            "change",
+            event => {
+
+                const file =
+                    event.target.files &&
+                    event.target.files[0];
+
+
+                if (file) {
+
+                    importBackup(
+                        file
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           EVENTOS — VIEWER
+        ========================================================= */
+
+        downloadCardButton.addEventListener(
+            "click",
+            downloadCardImage
+        );
+
+
+        exportCardJsonButton.addEventListener(
+            "click",
+            exportSelectedCardJSON
+        );
+
+
+        moveCardButton.addEventListener(
+            "click",
+            openMoveModal
+        );
+
+
+        deleteCardButton.addEventListener(
+            "click",
+            deleteSelectedCard
+        );
+
+
+        closeViewerButton.addEventListener(
+            "click",
+            closeCardViewer
+        );
+
+
+        /* =========================================================
+           EVENTOS — MOVE
+        ========================================================= */
+
+        closeMoveModalButton.addEventListener(
+            "click",
+            closeMoveModal
+        );
+
+
+        cancelMoveButton.addEventListener(
+            "click",
+            closeMoveModal
+        );
+
+
+        confirmMoveButton.addEventListener(
+            "click",
+            confirmMoveCard
+        );
+
+
+        /* =========================================================
+           FECHAR MODAIS CLICANDO FORA
+        ========================================================= */
+
+        cardViewerModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    cardViewerModal
+                ) {
+
+                    closeCardViewer();
+
+                }
+
+            }
+        );
+
+
+        moveCardModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    moveCardModal
+                ) {
+
+                    closeMoveModal();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           ESC FECHA MODAIS
+        ========================================================= */
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key !==
+                    "Escape"
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    moveCardModal.classList.contains(
+                        "open"
+                    )
+                ) {
+
+                    closeMoveModal();
+
+                    return;
+
+                }
+
+
+                if (
+                    cardViewerModal.classList.contains(
+                        "open"
+                    )
+                ) {
+
+                    closeCardViewer();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           INIT
+        ========================================================= */
+
+        async function init() {
+
+            try {
+
+                await openAlbumDatabase();
+
+                await refreshData();
+
+                renderCollections();
+
+                renderCards();
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao inicializar álbum:",
+                    error
+                );
+
+
+                cardsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            ⚠️
+                        </div>
+
+                        <h2>
+                            Não foi possível carregar o álbum
+                        </h2>
+
+                        <p>
+                            O banco de dados não pôde ser aberto.
+                            Verifique o console do navegador para
+                            mais informações.
+                        </p>
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        init();
+
+    </script>
+
+</body>
+</html>
