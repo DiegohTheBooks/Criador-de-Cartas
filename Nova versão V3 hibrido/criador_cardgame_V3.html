@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criador de Cartas — Versão Game Stats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:radial-gradient(circle at top,#3d315b 0%,#1b1b2f 35%,#11111f 75%);color:#f5f0df;font-family:Montserrat,sans-serif}
+header{border-bottom:1px solid rgba(201,162,39,.25);background:rgba(17,17,31,.9);backdrop-filter:blur(8px)}
+.header-inner{max-width:1200px;margin:auto;min-height:76px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.logo{color:#f5f0df;text-decoration:none;font:600 1.25rem "Playfair Display",serif}.logo span{color:#c9a227}
+nav{display:flex;gap:26px}nav a{color:#d8d2c2;text-decoration:none;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}nav a:hover,nav a.active{color:#c9a227}
+.heading{text-align:center;max-width:1100px;margin:auto;padding:52px 24px 32px}.eyebrow{color:#c9a227;font-size:.72rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase}.heading h1{font:600 clamp(2rem,4vw,3rem) "Playfair Display",serif;margin-top:10px}.heading p{color:#aaa49a;margin-top:10px;font-size:.9rem}
+.app{width:min(1200px,calc(100% - 40px));margin:0 auto 80px;display:grid;grid-template-columns:380px 360px;gap:42px;justify-content:center;align-items:start}
+.panel{background:rgba(17,17,31,.9);border:1px solid rgba(201,162,39,.25);border-radius:18px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.28)}
+.panel h2{font:600 1.35rem "Playfair Display",serif;margin-bottom:20px;color:#f2ead4}
+.field{margin-bottom:15px}.field label{display:block;margin-bottom:7px;color:#c9a227;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+input[type=text],input[type=number],input[type=file],select,textarea{width:100%;padding:10px 11px;background:#151524;color:#eee8d8;border:1px solid rgba(201,162,39,.25);border-radius:8px;font:400 .84rem Montserrat,sans-serif;outline:none}
+textarea{min-height:92px;resize:vertical;line-height:1.5}input:focus,select:focus,textarea:focus{border-color:rgba(201,162,39,.75)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat input{text-align:center;font-weight:700}
+.hint{color:#8f8999;font-size:.7rem;line-height:1.45;margin-top:6px}
+.buttons{display:flex;gap:10px;margin-top:20px}button{flex:1;border:0;border-radius:8px;padding:12px 10px;font:700 .75rem Montserrat,sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:.2s}button:hover{transform:translateY(-1px)}button:disabled{opacity:.6;cursor:wait;transform:none}
+.primary{background:#c9a227;color:#11111f}.secondary{background:#29263d;color:#e9e1cc;border:1px solid rgba(201,162,39,.25)}.album-btn{width:100%;margin-top:10px;background:transparent;color:#c9a227;border:1px solid rgba(201,162,39,.55)}
+.preview{display:flex;justify-content:center}.canvas-wrap{width:360px;padding:15px;background:rgba(17,17,31,.6);border:1px solid rgba(201,162,39,.18);border-radius:22px;box-shadow:0 25px 70px rgba(0,0,0,.35)}canvas{width:100%;height:auto;display:block;border-radius:15px}
+.recent{width:min(1200px,calc(100% - 40px));margin:0 auto 80px}.recent h2{text-align:center;font:600 2rem "Playfair Display",serif}.recent p{text-align:center;color:#aaa49a;font-size:.82rem;margin:8px 0 25px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:rgba(17,17,31,.82);border:1px solid rgba(201,162,39,.25);border-radius:14px;padding:8px}.card img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:9px;cursor:pointer}.card h3{font:600 .95rem "Playfair Display",serif;margin:9px 3px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card .work{color:#c9a227;font-size:.6rem;font-weight:700;text-transform:uppercase;margin:0 3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-stats{display:flex;justify-content:space-between;color:#d8d2c2;font-size:.62rem;padding:4px 3px}.skill{color:#c9a227;font-size:.62rem;line-height:1.35;padding:3px}
+footer{text-align:center;border-top:1px solid rgba(201,162,39,.22);background:rgba(17,17,31,.92);padding:30px 20px;color:#888393;font-size:.7rem}footer strong{font:1rem "Playfair Display",serif;color:#eee6d2}footer strong span{color:#c9a227}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:25px;background:rgba(5,5,10,.9);z-index:10}.modal.show{display:flex}.modal img{max-width:min(520px,90vw);max-height:88vh;border:1px solid #c9a227;border-radius:16px}.close{position:absolute;top:18px;right:20px;width:40px;flex:none;border-radius:50%;background:#1b1b2f;color:#f1dfb1;border:1px solid #c9a227;font-size:1rem}
+@media(max-width:900px){.app{grid-template-columns:1fr;max-width:650px}.preview{order:-1}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.header-inner{flex-direction:column;padding:18px}.app,.recent{width:calc(100% - 24px)}.grid{gap:12px}.panel{padding:19px}}
+</style>
+</head>
+<body>
+<header><div class="header-inner">
+<a class="logo" href="criador.html">Um Mundo <span>Além das Páginas</span></a>
+<nav><a class="active" href="criador.html">Criador</a><a href="album.html">Álbum</a></nav>
+</div></header>
+
+<section class="heading">
+<div class="eyebrow">Coleção de personagens</div>
+<h1>Criador de Cartas</h1>
+<p>Crie a carta visual e já defina os atributos que o Card Duels utilizará.</p>
+</section>
+
+<main class="app">
+<section class="panel">
+<h2>Personalizar carta</h2>
+
+<div class="field"><label for="name">Nome do personagem</label><input id="name" type="text" value="W. Kusanagi"></div>
+<div class="field"><label for="image">Imagem do personagem</label><input id="image" type="file" accept="image/*"></div>
+
+<div class="field"><label for="work">Obra / Coleção</label>
+<select id="work">
+<option>Um Casamento Político</option><option>Enid, a Garota Lobo</option>
+<option>Entre a Luz e as Sombras</option><option>Academia Anthigonus</option>
+<option>Gotei 13</option><option>As Chamas sob a Coroa</option><option>Outros</option>
+</select></div>
+<div class="field" id="otherWorkBox" style="display:none"><label for="otherWork">Nome da obra</label><input id="otherWork" type="text" placeholder="Digite o nome da obra"></div>
+
+<div class="field"><label>Zoom e enquadramento</label><input id="zoom" type="range" min=".8" max="2.5" step=".01" value="1"><div class="hint" id="zoomValue">1.00×</div></div>
+<div class="field"><label>Posição horizontal</label><input id="x" type="range" min="-500" max="500" value="0"><div class="hint" id="xValue">0</div></div>
+<div class="field"><label>Posição vertical</label><input id="y" type="range" min="-500" max="500" value="0"><div class="hint" id="yValue">0</div></div>
+
+<div class="field"><label for="style">Estilo do nome</label><select id="style"><option value="box">Moldura dourada</option><option value="simple">Clássico</option></select></div>
+
+<div class="field">
+<label>Atributos do Card Duels</label>
+<div class="stats">
+<div class="stat"><input id="mana" type="number" min="1" max="10" value="2"><div class="hint" style="text-align:center">Mana</div></div>
+<div class="stat"><input id="atk" type="number" min="0" max="50" value="5"><div class="hint" style="text-align:center">ATK</div></div>
+<div class="stat"><input id="def" type="number" min="0" max="50" value="5"><div class="hint" style="text-align:center">DEF</div></div>
+</div>
+<div class="hint" id="balanceHint">Regra atual: ATK + DEF = Mana × 5.</div>
+</div>
+
+<div class="field"><label for="skill">Descrição da habilidade</label><textarea id="skill" placeholder="Ex.: Ao entrar em campo, compre 1 carta."></textarea><div class="hint">A descrição é salva como dado da carta; não altera a imagem PNG.</div></div>
+
+<div class="buttons"><button class="secondary" id="reset">Restaurar</button><button class="primary" id="download">Baixar PNG</button></div>
+<button class="album-btn" id="save">✦ Adicionar ao álbum</button>
+</section>
+
+<section class="preview"><div class="canvas-wrap"><canvas id="canvas" width="900" height="1350"></canvas></div></section>
+</main>
+
+<section class="recent"><h2>Cartas Recentes</h2><p>As últimas cartas salvas no mesmo banco IndexedDB utilizado pelo Álbum.</p><div class="grid" id="recent"></div></section>
+
+<footer><strong>Um Mundo <span>Além das Páginas</span></strong><br><br>Onde cada história leva a um novo mundo.</footer>
+
+<div class="modal" id="modal"><button class="close" id="close">×</button><img id="modalImg" alt="Carta ampliada"></div>
+
+<script>
+const DB_NAME="UmMundoAlemDasPaginasAlbum", DB_VERSION=2, CARD_STORE="cards", COLLECTION_STORE="collections";
+const $=id=>document.getElementById(id);
+const canvas=$("canvas"),ctx=canvas.getContext("2d");
+let image=new Image(); image.crossOrigin="anonymous";
+image.src="https://i.postimg.cc/cJ893vgm/AP1Gcz-NTm-Xz4F3qrkp-LQuhwdg-Ye4do-Og.png";
+let db=null;
+
+function openDB(){return new Promise((resolve,reject)=>{if(db)return resolve(db);const r=indexedDB.open(DB_NAME,DB_VERSION);
+r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains(CARD_STORE))d.createObjectStore(CARD_STORE,{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains(COLLECTION_STORE))d.createObjectStore(COLLECTION_STORE,{keyPath:"id",autoIncrement:true})};
+r.onsuccess=e=>{db=e.target.result;resolve(db)};r.onerror=()=>reject(r.error)})}
+function getCards(){return openDB().then(d=>new Promise((res,rej)=>{const q=d.transaction(CARD_STORE,"readonly").objectStore(CARD_STORE).getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}))}
+function addCard(card){return openDB().then(d=>new Promise((res,rej)=>{const t=d.transaction(CARD_STORE,"readwrite"),q=t.objectStore(CARD_STORE).add(card);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}))}
+function work(){return $("work").value==="Outros"?($("otherWork").value.trim()||"Coleção de personagens"):$("work").value}
+
+function draw(){
+ctx.clearRect(0,0,900,1350);
+let g=ctx.createLinearGradient(0,0,0,1350);g.addColorStop(0,"#17151f");g.addColorStop(1,"#08080d");ctx.fillStyle=g;ctx.fillRect(0,0,900,1350);
+if(image.complete&&image.naturalWidth){
+const scale=Math.max(900/image.naturalWidth,1350/image.naturalHeight)*+$("zoom").value;
+const w=image.naturalWidth*scale,h=image.naturalHeight*scale,ox=(900-w)/2+ +$("x").value,oy=(1350-h)/2+ +$("y").value;
+ctx.save();ctx.beginPath();ctx.roundRect(0,0,900,1350,28);ctx.clip();ctx.drawImage(image,ox,oy,w,h);
+const v=ctx.createRadialGradient(450,550,150,450,650,850);v.addColorStop(0,"transparent");v.addColorStop(.7,"rgba(0,0,0,.08)");v.addColorStop(1,"rgba(0,0,0,.65)");ctx.fillStyle=v;ctx.fillRect(0,0,900,1350);ctx.restore();
+}
+ctx.strokeStyle="rgba(201,162,39,.85)";ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(14,14,872,1322,22);ctx.stroke();
+const n=$("name").value||"Personagem";ctx.textAlign="center";ctx.textBaseline="middle";
+ctx.fillStyle="#f0e4c6";ctx.font="600 42px Georgia,serif";if(ctx.measureText(n).width>680)ctx.font="600 34px Georgia,serif";
+ctx.fillText("✦ "+n+" ✦",450,95);
+ctx.fillStyle="#c9a227";ctx.font="700 24px Montserrat,sans-serif";ctx.fillText(work().toUpperCase(),450,1280);
+}
+function renderRecent(){
+getCards().then(cards=>{$("recent").innerHTML="";cards.slice(-8).reverse().forEach(c=>{const u=URL.createObjectURL(c.image instanceof Blob?c.image:new Blob());const el=document.createElement("div");el.className="card";el.innerHTML=`<img src="${u}"><h3>${esc(c.name)}</h3><div class="work">${esc(c.work||"")}</div><div class="mini-stats"><span>⚡ ${c.mana??"—"}</span><span>⚔ ${c.atk??"—"}</span><span>🛡 ${c.def??"—"}</span></div><div class="skill">${esc(c.skillDescription||"Sem habilidade descrita.")}</div>`;el.querySelector("img").onclick=()=>{$("modalImg").src=u;$("modal").classList.add("show")};$("recent").appendChild(el)})})
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function enforceStats(){const m=Math.max(1,+$("mana").value||1), total=m*5;let a=Math.max(0,+$("atk").value||0);let d=Math.max(0,+$("def").value||0);if(a+d!==total){d=Math.max(0,total-a);if(d>50){a=Math.min(50,total);d=total-a} $("def").value=d}$("balanceHint").textContent=`ATK + DEF = Mana × 5 → ${$("atk").value} + ${$("def").value} = ${m*5}.`}
+["zoom","x","y"].forEach(id=>$(id).addEventListener("input",()=>{$(id+"Value").textContent=id==="zoom"?Number($(id).value).toFixed(2)+"×":$(id).value;draw()}));
+["name","otherWork"].forEach(id=>$(id).addEventListener("input",draw));$("work").addEventListener("change",()=>{$("otherWorkBox").style.display=$("work").value==="Outros"?"block":"none";draw()});
+["mana","atk","def"].forEach(id=>$(id).addEventListener("input",enforceStats));
+$("image").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{image=new Image();image.onload=draw;image.src=ev.target.result};r.readAsDataURL(f)});
+$("download").onclick=()=>{const a=document.createElement("a");a.download=($("name").value||"personagem")+"-carta.png";a.href=canvas.toDataURL("image/png");a.click()};
+$("save").onclick=async()=>{const btn=$("save");btn.disabled=true;try{enforceStats();await addCard({name:$("name").value.trim()||"Personagem",work:work(),image:await new Promise((res,rej)=>canvas.toBlob(b=>b?res(b):rej(new Error("PNG inválido")),"image/png")),createdAt:Date.now(),mana:+$("mana").value,atk:+$("atk").value,def:+$("def").value,skillDescription:$("skill").value.trim()});await renderRecent();document.querySelector(".recent").scrollIntoView({behavior:"smooth"})}catch(e){console.error(e);alert("Não foi possível adicionar esta carta ao álbum.")}finally{btn.disabled=false}};
+$("reset").onclick=()=>{location.reload()};$("close").onclick=()=>$("modal").classList.remove("show");$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.remove("show")};
+image.onload=draw;draw();renderRecent();
+</script>
+</body>
+</html>

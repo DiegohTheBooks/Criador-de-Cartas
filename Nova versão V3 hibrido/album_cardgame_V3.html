@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Meu Álbum — Um Mundo Além das Páginas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;background:radial-gradient(circle at top,#25213d 0,#151526 45%,#0e0e19 100%);color:#f5f1e8;font-family:Montserrat,sans-serif}body.modal-open{overflow:hidden}button,input{font-family:inherit}
+header{background:rgba(17,17,31,.9);border-bottom:1px solid rgba(201,162,39,.35);backdrop-filter:blur(10px)}.head{width:min(1200px,100%);min-height:76px;margin:auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between}.logo{font:600 1.25rem "Playfair Display",serif;color:#f5f1e8;text-decoration:none}.logo span{color:#c9a227}nav{display:flex;gap:28px}nav a{color:#c8c4d4;text-decoration:none;font-size:.82rem;font-weight:600;text-transform:uppercase}nav a.active,nav a:hover{color:#c9a227}
+.layout{width:min(1400px,94%);margin:40px auto;display:grid;grid-template-columns:270px 1fr;gap:30px}.sidebar{background:rgba(20,20,34,.92);border:1px solid rgba(201,162,39,.18);border-radius:18px;padding:22px;height:max-content}.title{font:600 1.3rem "Playfair Display",serif;color:#c9a227;margin-bottom:15px}.divider{height:1px;background:rgba(255,255,255,.08);margin:20px 0}.collection{width:100%;padding:11px 13px;margin-bottom:7px;border:1px solid transparent;border-radius:10px;background:transparent;color:#d7d3df;text-align:left;cursor:pointer}.collection:hover,.collection.active{background:rgba(201,162,39,.1);border-color:rgba(201,162,39,.35);color:#c9a227}.collection small{display:block;color:#858195;margin-top:4px}.action{width:100%;padding:11px 12px;margin-bottom:8px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(255,255,255,.025);color:#c9c4d2;text-align:left;cursor:pointer}.action:hover{background:rgba(201,162,39,.08);border-color:rgba(201,162,39,.3);color:#c9a227}.action.gold{background:rgba(201,162,39,.12);border-color:rgba(201,162,39,.45);color:#c9a227}.note{font-size:.68rem;color:rgba(244,241,232,.45);line-height:1.5;margin-top:8px}
+.header{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px;gap:20px}.header h1{font:600 2rem "Playfair Display",serif}.header p{color:#8f8a9f;font-size:.85rem;margin-top:5px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px}.card{background:#181827;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;cursor:pointer;transition:.2s}.card:hover{transform:translateY(-4px);border-color:rgba(201,162,39,.4);box-shadow:0 15px 35px rgba(0,0,0,.3)}.card img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:#0d0d17}.info{padding:13px}.name{font:600 1.02rem "Playfair Display",serif;margin-bottom:4px}.work{font-size:.72rem;color:#c9a227}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:9px}.stats span{background:#222033;border-radius:5px;padding:5px 2px;text-align:center;font-size:.62rem}.ability{font-size:.62rem;color:#aaa3b5;line-height:1.35;margin-top:7px;min-height:32px}.empty{min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;border:1px dashed rgba(201,162,39,.2);border-radius:16px;color:#888397;grid-column:1/-1}
+.modal{position:fixed;inset:0;background:rgba(5,5,12,.82);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000;backdrop-filter:blur(5px)}.modal.active{display:flex}.box{width:min(560px,100%);max-height:94vh;overflow:auto;background:#191927;border:1px solid rgba(201,162,39,.3);border-radius:18px;padding:20px;box-shadow:0 25px 80px rgba(0,0,0,.65);position:relative}.viewer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.viewer-head h2{font:600 1.3rem "Playfair Display",serif;color:#c9a227}.close{width:38px;height:38px;border:1px solid rgba(255,255,255,.1);border-radius:50%;background:rgba(255,255,255,.04);color:#ddd;font-size:1.2rem;cursor:pointer}.preview{width:min(360px,100%);margin:auto;display:block;border-radius:10px}.details{margin-top:15px}.details .work{margin-bottom:12px}.bigstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bigstat{background:#222033;border:1px solid rgba(201,162,39,.15);border-radius:8px;padding:10px;text-align:center;font-size:.65rem}.bigstat b{display:block;color:#c9a227;font-size:1.3rem;margin-bottom:3px}.details h3{font:600 1.05rem "Playfair Display",serif;color:#c9a227;margin:18px 0 6px}.details p{color:#c8c1b4;font-size:.82rem;line-height:1.6;white-space:pre-wrap}.viewer-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:18px}.viewer-action{padding:11px;border-radius:9px;cursor:pointer;font-weight:600;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#ddd}.viewer-action:hover{border-color:rgba(201,162,39,.45);color:#c9a227}.viewer-action.primary{background:#c9a227;color:#151515;border-color:#c9a227}.viewer-action.danger{color:#e6a0a0}.viewer-action:disabled{opacity:.55;cursor:wait}
+.collection-list{display:flex;flex-direction:column;gap:7px}.collection-option{width:100%;padding:12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#ddd;text-align:left;cursor:pointer}.collection-option:hover{border-color:rgba(201,162,39,.45);color:#c9a227}.collection-option.active{border-color:#c9a227;color:#c9a227}
+.modal-small .box{width:min(420px,100%)}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.input{width:100%;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:#10101c;color:#fff;outline:none}.input:focus{border-color:rgba(201,162,39,.6)}
+footer{text-align:center;border-top:1px solid rgba(201,162,39,.22);padding:30px;color:#888393;font-size:.7rem;margin-top:60px}footer strong{font:1rem "Playfair Display",serif;color:#eee6d2}footer span{color:#c9a227}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}}@media(max-width:600px){.head{flex-direction:column;padding:18px;gap:15px}.layout{width:calc(100% - 24px);margin-top:24px}.viewer-actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="head"><a class="logo" href="criador.html">Um Mundo <span>Além das Páginas</span></a><nav><a href="criador.html">Criador</a><a class="active" href="album.html">Álbum</a></nav></div></header>
+
+<main class="layout">
+<aside class="sidebar">
+<h2 class="title">Coleções</h2>
+<div id="collections"></div>
+<div class="divider"></div>
+<button class="action gold" id="newCollection">＋ Criar coleção</button>
+<div class="divider"></div>
+<h2 class="title">Game Card</h2>
+<button class="action" id="exportGame">🎮 Exportar álbum para o game</button>
+<p class="note">As imagens são reduzidas para WebP 600×900, qualidade 70%, como no exportador otimizado original.</p>
+<div class="divider"></div>
+<h2 class="title">Dados</h2>
+<button class="action" id="exportBackup">💾 Exportar backup completo</button>
+<button class="action" id="importBackupBtn">📥 Importar backup completo</button>
+<input id="backupFile" type="file" accept=".json,application/json" hidden>
+</aside>
+
+<section>
+<div class="header"><div><h1 id="heading">Todas as cartas</h1><p id="count"></p></div></div>
+<div class="grid" id="grid"></div>
+</section>
+</main>
+
+<footer><strong>Um Mundo <span>Além das Páginas</span></strong><br><br>Onde cada história leva a um novo mundo.</footer>
+
+<div class="modal" id="viewer"><div class="box">
+<div class="viewer-head"><h2 id="vName"></h2><button class="close" id="closeViewer">×</button></div>
+<img id="vImage" class="preview" alt="">
+<div class="details"><div id="vWork" class="work"></div>
+<div class="bigstats"><div class="bigstat"><b id="vMana">—</b>Mana</div><div class="bigstat"><b id="vAtk">—</b>ATK</div><div class="bigstat"><b id="vDef">—</b>DEF</div></div>
+<h3>Habilidade</h3><p id="vAbility">Nenhuma habilidade descrita.</p>
+<div class="viewer-actions">
+<button class="viewer-action primary" id="exportCard">🎮 Exportar para o game</button>
+<button class="viewer-action" id="downloadCard">↓ Baixar carta</button>
+<button class="viewer-action" id="moveCard">📁 Mover para coleção</button>
+<button class="viewer-action danger" id="deleteCard">🗑 Excluir carta</button>
+</div></div></div></div>
+
+<div class="modal modal-small" id="moveModal"><div class="box">
+<div class="viewer-head"><h2>Mover carta</h2><button class="close" id="closeMove">×</button></div>
+<p style="color:#aaa3b5;font-size:.8rem;margin-bottom:14px">Escolha onde deseja guardar esta carta.</p><div id="moveOptions" class="collection-list"></div>
+<div class="modal-actions"><button class="viewer-action" id="cancelMove">Cancelar</button></div>
+</div></div>
+
+<div class="modal modal-small" id="collectionModal"><div class="box">
+<div class="viewer-head"><h2>Nova coleção</h2><button class="close" id="closeCollection">×</button></div>
+<input class="input" id="collectionName" placeholder="Nome da coleção" maxlength="80">
+<div class="modal-actions"><button class="viewer-action" id="cancelCollection">Cancelar</button><button class="viewer-action primary" id="createCollection">Criar</button></div>
+</div></div>
+
+<script>
+const DB_NAME="UmMundoAlemDasPaginasAlbum",DB_VERSION=2,CARD_STORE="cards",COLLECTION_STORE="collections";
+const GAME_IMAGE_WIDTH=600,GAME_IMAGE_HEIGHT=900,GAME_IMAGE_QUALITY=.70;
+let db=null,cards=[],collections=[],current="all",selected=null;
+
+const $=id=>document.getElementById(id);
+function openDB(){return new Promise((resolve,reject)=>{if(db)return resolve(db);const r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains(CARD_STORE))d.createObjectStore(CARD_STORE,{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains(COLLECTION_STORE))d.createObjectStore(COLLECTION_STORE,{keyPath:"id",autoIncrement:true})};r.onsuccess=e=>{db=e.target.result;resolve(db)};r.onerror=()=>reject(r.error)})}
+function getAll(store){return openDB().then(d=>new Promise((res,rej)=>{const q=d.transaction(store,"readonly").objectStore(store).getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}))}
+function put(store,obj){return openDB().then(d=>new Promise((res,rej)=>{const q=d.transaction(store,"readwrite").objectStore(store).put(obj);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}))}
+function del(store,id){return openDB().then(d=>new Promise((res,rej)=>{const q=d.transaction(store,"readwrite").objectStore(store).delete(id);q.onsuccess=()=>res();q.onerror=()=>rej(q.error)}))}
+function abilityOf(c){return c.ability??c.skillDescription??""}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function source(img){if(typeof img==="string")return img;if(img instanceof Blob)return URL.createObjectURL(img);return null}
+function sanitize(s){return String(s||"carta").trim().replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g,"-")||"carta"}
+
+async function load(){cards=await getAll(CARD_STORE);collections=await getAll(COLLECTION_STORE);renderCollections();renderCards()}
+function renderCollections(){let h=`<button class="collection ${current==="all"?"active":""}" data-id="all">Todas<small>${cards.length} carta(s)</small></button>`;collections.forEach(c=>{const n=cards.filter(x=>String(x.collectionId)===String(c.id)).length;h+=`<button class="collection ${String(current)===String(c.id)?"active":""}" data-id="${c.id}">${esc(c.name)}<small>${n} carta(s)</small></button>`});$("collections").innerHTML=h;document.querySelectorAll(".collection").forEach(b=>b.onclick=()=>{current=b.dataset.id;renderCollections();renderCards()})}
+function renderCards(){const list=current==="all"?cards:cards.filter(c=>String(c.collectionId)===String(current));$("heading").textContent=current==="all"?"Todas as cartas":(collections.find(c=>String(c.id)===String(current))?.name||"Coleção");$("count").textContent=`${list.length} carta(s)`;if(!list.length){$("grid").innerHTML='<div class="empty"><h3>Álbum vazio</h3><p>Nenhuma carta nesta coleção.</p></div>';return}$("grid").innerHTML="";list.slice().reverse().forEach(c=>{const el=document.createElement("article");el.className="card";const u=source(c.image);el.innerHTML=`<img src="${u||""}" alt=""><div class="info"><div class="name">${esc(c.name)}</div><div class="work">${esc(c.work||"")}</div><div class="stats"><span>⚡ ${c.mana??"—"}</span><span>⚔ ${c.atk??"—"}</span><span>🛡 ${c.def??"—"}</span></div><div class="ability">${esc(abilityOf(c)||"Sem habilidade descrita.")}</div></div>`;el.onclick=()=>openViewer(c);$("grid").appendChild(el)})}
+
+function openViewer(c){selected=c;$("vName").textContent=c.name||"Personagem";$("vWork").textContent=c.work||"";$("vMana").textContent=c.mana??"—";$("vAtk").textContent=c.atk??"—";$("vDef").textContent=c.def??"—";$("vAbility").textContent=abilityOf(c)||"Nenhuma habilidade descrita.";const old=$("vImage").src;if(old&&old.startsWith("blob:"))URL.revokeObjectURL(old);$("vImage").src=source(c.image)||"";$("viewer").classList.add("active");document.body.classList.add("modal-open")}
+function closeViewer(){$("viewer").classList.remove("active");document.body.classList.remove("modal-open");selected=null}
+
+async function createCollection(){const name=$("collectionName").value.trim();if(!name)return alert("Digite um nome para a coleção.");if(collections.some(c=>c.name.toLowerCase()===name.toLowerCase()))return alert("Já existe uma coleção com esse nome.");await put(COLLECTION_STORE,{name,createdAt:Date.now()});$("collectionModal").classList.remove("active");$("collectionName").value="";await load()}
+function openMove(){if(!selected)return;let h=`<button class="collection-option ${selected.collectionId==null?"active":""}" data-id="">Sem coleção</button>`;collections.forEach(c=>h+=`<button class="collection-option ${String(selected.collectionId)===String(c.id)?"active":""}" data-id="${c.id}">${esc(c.name)}</button>`);$("moveOptions").innerHTML=h;document.querySelectorAll(".collection-option").forEach(b=>b.onclick=async()=>{selected.collectionId=b.dataset.id===""?null:Number(b.dataset.id);await put(CARD_STORE,selected);$("moveModal").classList.remove("active");closeViewer();await load()});$("moveModal").classList.add("active")}
+async function deleteSelected(){if(!selected)return;if(!confirm(`Excluir a carta "${selected.name||"sem nome"}"? Esta ação não pode ser desfeita.`))return;await del(CARD_STORE,selected.id);closeViewer();await load()}
+
+function blobToDataURL(blob){return new Promise((res,rej)=>{if(typeof blob==="string")return res(blob);const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(blob)})}
+function dataURLToBlob(data){const p=data.split(",");const mime=(p[0].match(/:(.*?);/)||[])[1]||"image/png";const bin=atob(p[1]||"");const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new Blob([bytes],{type:mime})}
+function downloadText(name,text){const u=URL.createObjectURL(new Blob([text],{type:"application/json;charset=utf-8"}));const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function loadImage(src){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error("Não foi possível carregar a imagem."));im.src=src})}
+function drawCover(ctx,img,w,h){const iw=img.width||img.naturalWidth,ih=img.height||img.naturalHeight,s=Math.max(w/iw,h/ih),dw=iw*s,dh=ih*s;ctx.drawImage(img,(w-dw)/2,(h-dh)/2,dw,dh)}
+async function optimizeImageForGame(imgSource){let blob;if(imgSource instanceof Blob)blob=imgSource;else if(typeof imgSource==="string"&&imgSource.startsWith("data:"))blob=dataURLToBlob(imgSource);else if(typeof imgSource==="string"){const im=await loadImage(imgSource);const c=document.createElement("canvas");c.width=GAME_IMAGE_WIDTH;c.height=GAME_IMAGE_HEIGHT;drawCover(c.getContext("2d",{alpha:false}),im,GAME_IMAGE_WIDTH,GAME_IMAGE_HEIGHT);return c.toDataURL("image/webp",GAME_IMAGE_QUALITY)}else throw new Error("Formato de imagem não suportado.");const c=document.createElement("canvas");c.width=GAME_IMAGE_WIDTH;c.height=GAME_IMAGE_HEIGHT;const ctx=c.getContext("2d",{alpha:false});if(typeof createImageBitmap==="function"){const bm=await createImageBitmap(blob);try{drawCover(ctx,bm,GAME_IMAGE_WIDTH,GAME_IMAGE_HEIGHT)}finally{bm.close?.()}}else{const u=URL.createObjectURL(blob);try{drawCover(ctx,await loadImage(u),GAME_IMAGE_WIDTH,GAME_IMAGE_HEIGHT)}finally{URL.revokeObjectURL(u)}}return c.toDataURL("image/webp",GAME_IMAGE_QUALITY)}
+
+function cardForGame(c,image){return{id:c.id,name:c.name||"",work:c.work||"",atk:Number(c.atk)||0,def:Number(c.def)||0,mana:Number(c.mana)||0,ability:abilityOf(c),collectionId:c.collectionId??null,createdAt:c.createdAt??null,image}}
+async function exportOne(){if(!selected)return;const b=$("exportCard"),old=b.textContent;b.disabled=true;b.textContent="⏳ Preparando...";try{const optimized=await optimizeImageForGame(selected.image);const data={format:"Um Mundo Além das Páginas — Game Card",gameVersion:1,exportedAt:Date.now(),image:{format:"webp",width:GAME_IMAGE_WIDTH,height:GAME_IMAGE_HEIGHT,quality:GAME_IMAGE_QUALITY},card:cardForGame(selected,optimized)};const json=JSON.stringify(data,null,2);downloadText(sanitize(selected.name)+"-game.json",json);alert(`Carta exportada para o game com sucesso.\\n\\nWebP ${GAME_IMAGE_WIDTH}×${GAME_IMAGE_HEIGHT} • qualidade ${Math.round(GAME_IMAGE_QUALITY*100)}%\\nTamanho: ${(new Blob([json]).size/1048576).toFixed(2)} MB`)}catch(e){console.error(e);alert("Não foi possível exportar a carta para o game.\\n"+e.message)}finally{b.disabled=false;b.textContent=old}}
+async function exportGame(){if(!cards.length)return alert("Não há cartas para exportar.");const b=$("exportGame"),old=b.textContent;b.disabled=true;try{const gameCards=[];for(let i=0;i<cards.length;i++){b.textContent=`⏳ Preparando ${i+1}/${cards.length}...`;if(!cards[i].image)continue;gameCards.push(cardForGame(cards[i],await optimizeImageForGame(cards[i].image)))}const data={format:"Um Mundo Além das Páginas — Game Card",gameVersion:1,exportedAt:Date.now(),image:{format:"webp",width:GAME_IMAGE_WIDTH,height:GAME_IMAGE_HEIGHT,quality:GAME_IMAGE_QUALITY},collections:collections.map(c=>({id:c.id,name:c.name,createdAt:c.createdAt??null})),cards:gameCards};const json=JSON.stringify(data,null,2);downloadText("album-game-cards.json",json);alert(`Álbum exportado para o game.\\n\\nCartas: ${gameCards.length}\\nTamanho: ${(new Blob([json]).size/1048576).toFixed(2)} MB\\nImagens: WebP 600×900, qualidade 70%.`)}catch(e){console.error(e);alert("Não foi possível exportar o álbum para o game.\\n"+e.message)}finally{b.disabled=false;b.textContent=old}}
+async function exportBackup(){try{const out=[];for(let i=0;i<cards.length;i++){const c=cards[i];out.push({id:c.id,name:c.name||"",work:c.work||"",atk:Number(c.atk)||0,def:Number(c.def)||0,mana:Number(c.mana)||0,ability:abilityOf(c),createdAt:c.createdAt??null,collectionId:c.collectionId??null,image:c.image instanceof Blob?await blobToDataURL(c.image):c.image||null})}const data={format:"Um Mundo Além das Páginas — Álbum",backupVersion:2,database:DB_NAME,exportedAt:Date.now(),collections,cards:out};const json=JSON.stringify(data,null,2);downloadText("album-backup.json",json);alert(`Backup exportado.\\n\\nCartas: ${out.length}\\nTamanho: ${(new Blob([json]).size/1048576).toFixed(2)} MB\\n\\nAs imagens originais foram preservadas.`)}catch(e){console.error(e);alert("Não foi possível exportar o backup.\\n"+e.message)}}
+async function importBackup(file){try{const data=JSON.parse(await file.text());if(data?.format!=="Um Mundo Além das Páginas — Álbum")throw new Error("Este arquivo não é um backup do Álbum.");if(!Array.isArray(data.cards)||!Array.isArray(data.collections))throw new Error("Backup incompleto.");if(!confirm(`Importar este backup?\\n\\nCartas: ${data.cards.length}\\nColeções: ${data.collections.length}\\n\\nO Álbum atual será substituído.`))return;const d=await openDB();const tx=d.transaction([CARD_STORE,COLLECTION_STORE],"readwrite");const cs=tx.objectStore(CARD_STORE),ks=tx.objectStore(COLLECTION_STORE);cs.clear();ks.clear();data.collections.forEach(c=>ks.put(c));data.cards.forEach(c=>cs.put({...c,image:typeof c.image==="string"&&c.image.startsWith("data:")?dataURLToBlob(c.image):c.image,mana:Number(c.mana)||0,atk:Number(c.atk)||0,def:Number(c.def)||0,ability:c.ability??c.skillDescription??""}));tx.oncomplete=load;tx.onerror=()=>alert("Falha ao importar o backup.")}catch(e){console.error(e);alert("Não foi possível importar o backup.\\n"+e.message)}}
+
+$("newCollection").onclick=()=>$("collectionModal").classList.add("active");$("createCollection").onclick=createCollection;$("cancelCollection").onclick=()=>$("collectionModal").classList.remove("active");$("closeCollection").onclick=()=>$("collectionModal").classList.remove("active");$("collectionName").onkeydown=e=>{if(e.key==="Enter")createCollection()};
+$("closeViewer").onclick=closeViewer;$("viewer").onclick=e=>{if(e.target===$("viewer"))closeViewer()};$("moveCard").onclick=openMove;$("closeMove").onclick=()=>$("moveModal").classList.remove("active");$("cancelMove").onclick=()=>$("moveModal").classList.remove("active");$("deleteCard").onclick=deleteSelected;$("exportCard").onclick=exportOne;
+$("downloadCard").onclick=()=>{if(!selected)return;const u=source(selected.image);if(!u)return alert("Esta carta não possui uma imagem.");const a=document.createElement("a");a.href=u;a.download=sanitize(selected.name)+".png";document.body.appendChild(a);a.click();a.remove();if(u.startsWith("blob:"))setTimeout(()=>URL.revokeObjectURL(u),1000)};
+$("exportGame").onclick=exportGame;$("exportBackup").onclick=exportBackup;$("importBackupBtn").onclick=()=>$("backupFile").click();$("backupFile").onchange=e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value=""};
+load().catch(e=>{console.error(e);alert("Não foi possível abrir o Álbum.\\n"+e.message)});
+</script>
+</body>
+</html>
