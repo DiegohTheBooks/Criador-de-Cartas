@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criador de Cartas — V4 Gerador Inteligente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:radial-gradient(circle at top,#3d315b 0%,#1b1b2f 35%,#11111f 75%);color:#f5f0df;font-family:Montserrat,sans-serif}
+header{border-bottom:1px solid rgba(201,162,39,.25);background:rgba(17,17,31,.9);backdrop-filter:blur(8px)}
+.header-inner{max-width:1200px;margin:auto;min-height:76px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.logo{color:#f5f0df;text-decoration:none;font:600 1.25rem "Playfair Display",serif}.logo span{color:#c9a227}
+nav{display:flex;gap:26px}nav a{color:#d8d2c2;text-decoration:none;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}nav a:hover,nav a.active{color:#c9a227}
+.heading{text-align:center;max-width:1100px;margin:auto;padding:52px 24px 32px}.eyebrow{color:#c9a227;font-size:.72rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase}.heading h1{font:600 clamp(2rem,4vw,3rem) "Playfair Display",serif;margin-top:10px}.heading p{color:#aaa49a;margin-top:10px;font-size:.9rem}
+.app{width:min(1200px,calc(100% - 40px));margin:0 auto 80px;display:grid;grid-template-columns:380px 360px;gap:42px;justify-content:center;align-items:start}
+.panel{background:rgba(17,17,31,.9);border:1px solid rgba(201,162,39,.25);border-radius:18px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.28)}
+.panel h2{font:600 1.35rem "Playfair Display",serif;margin-bottom:20px;color:#f2ead4}
+.field{margin-bottom:15px}.field label{display:block;margin-bottom:7px;color:#c9a227;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+input[type=text],input[type=number],input[type=file],select,textarea{width:100%;padding:10px 11px;background:#151524;color:#eee8d8;border:1px solid rgba(201,162,39,.25);border-radius:8px;font:400 .84rem Montserrat,sans-serif;outline:none}
+textarea{min-height:92px;resize:vertical;line-height:1.5}input:focus,select:focus,textarea:focus{border-color:rgba(201,162,39,.75)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat input{text-align:center;font-weight:700}
+.hint{color:#8f8999;font-size:.7rem;line-height:1.45;margin-top:6px}
+.buttons{display:flex;gap:10px;margin-top:20px}button{flex:1;border:0;border-radius:8px;padding:12px 10px;font:700 .75rem Montserrat,sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:.2s}button:hover{transform:translateY(-1px)}button:disabled{opacity:.6;cursor:wait;transform:none}
+.primary{background:#c9a227;color:#11111f}.secondary{background:#29263d;color:#e9e1cc;border:1px solid rgba(201,162,39,.25)}.album-btn{width:100%;margin-top:10px;background:transparent;color:#c9a227;border:1px solid rgba(201,162,39,.55)}
+.preview{display:flex;justify-content:center}.canvas-wrap{width:360px;padding:15px;background:rgba(17,17,31,.6);border:1px solid rgba(201,162,39,.18);border-radius:22px;box-shadow:0 25px 70px rgba(0,0,0,.35)}canvas{width:100%;height:auto;display:block;border-radius:15px}
+.generator-note{margin-top:10px;padding:10px 12px;border:1px solid rgba(201,162,39,.18);border-radius:8px;background:rgba(201,162,39,.05);color:#aaa49a;font-size:.68rem;line-height:1.45}
+.valid{color:#a9d6a0!important}.invalid{color:#e7a3a3!important}
+.recent{width:min(1200px,calc(100% - 40px));margin:0 auto 80px}.recent h2{text-align:center;font:600 2rem "Playfair Display",serif}.recent p{text-align:center;color:#aaa49a;font-size:.82rem;margin:8px 0 25px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:rgba(17,17,31,.82);border:1px solid rgba(201,162,39,.25);border-radius:14px;padding:8px}.card img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:9px;cursor:pointer}.card h3{font:600 .95rem "Playfair Display",serif;margin:9px 3px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card .work{color:#c9a227;font-size:.6rem;font-weight:700;text-transform:uppercase;margin:0 3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-stats{display:flex;justify-content:space-between;color:#d8d2c2;font-size:.62rem;padding:4px 3px}.skill{color:#c9a227;font-size:.62rem;line-height:1.35;padding:3px}
+footer{text-align:center;border-top:1px solid rgba(201,162,39,.22);background:rgba(17,17,31,.92);padding:30px 20px;color:#888393;font-size:.7rem}footer strong{font:1rem "Playfair Display",serif;color:#eee6d2}footer strong span{color:#c9a227}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:25px;background:rgba(5,5,10,.9);z-index:10}.modal.show{display:flex}.modal img{max-width:min(520px,90vw);max-height:88vh;border:1px solid #c9a227;border-radius:16px}.close{position:absolute;top:18px;right:20px;width:40px;flex:none;border-radius:50%;background:#1b1b2f;color:#f1dfb1;border:1px solid #c9a227;font-size:1rem}
+@media(max-width:900px){.app{grid-template-columns:1fr;max-width:650px}.preview{order:-1}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.header-inner{flex-direction:column;padding:18px}.app,.recent{width:calc(100% - 24px)}.grid{gap:12px}.panel{padding:19px}}
+</style>
+</head>
+<body>
+<header><div class="header-inner">
+<a class="logo" href="criador.html">Um Mundo <span>Além das Páginas</span></a>
+<nav><a class="active" href="criador.html">Criador</a><a href="album.html">Álbum</a></nav>
+</div></header>
+
+<section class="heading">
+<div class="eyebrow">Coleção de personagens</div>
+<h1>Criador de Cartas — V4</h1>
+<p>Crie a carta visual e use o Gerador Inteligente para sugerir atributos e habilidades do Card Duels.</p>
+</section>
+
+<main class="app">
+<section class="panel">
+<h2>Personalizar carta</h2>
+
+<div class="field"><label for="name">Nome do personagem</label><input id="name" type="text" value="W. Kusanagi"></div>
+<div class="field"><label for="image">Imagem do personagem</label><input id="image" type="file" accept="image/*"></div>
+
+<div class="field"><label for="work">Obra / Coleção</label>
+<select id="work">
+<option>Um Casamento Político</option><option>Enid, a Garota Lobo</option>
+<option>Entre a Luz e as Sombras</option><option>Academia Anthigonus</option>
+<option>Gotei 13</option><option>As Chamas sob a Coroa</option><option>Outros</option>
+</select></div>
+<div class="field" id="otherWorkBox" style="display:none"><label for="otherWork">Nome da obra</label><input id="otherWork" type="text" placeholder="Digite o nome da obra"></div>
+
+<div class="field"><label>Zoom e enquadramento</label><input id="zoom" type="range" min=".8" max="2.5" step=".01" value="1"><div class="hint" id="zoomValue">1.00×</div></div>
+<div class="field"><label>Posição horizontal</label><input id="x" type="range" min="-500" max="500" value="0"><div class="hint" id="xValue">0</div></div>
+<div class="field"><label>Posição vertical</label><input id="y" type="range" min="-500" max="500" value="0"><div class="hint" id="yValue">0</div></div>
+
+<div class="field"><label for="style">Estilo do nome</label><select id="style">
+<option value="box">Moldura dourada</option>
+<option value="curves">Ornamental — Curvas</option>
+<option value="lines">Ornamental — Linhas</option>
+<option value="simple">Clássico</option>
+</select></div>
+
+<div class="field">
+<label for="characterDescription">Características do personagem</label>
+<textarea id="characterDescription" placeholder="Descreva brevemente a personalidade, estilo de combate, poderes ou características do personagem. Ex.: ágil, agressiva, especialista em ataques rápidos..."></textarea>
+<div class="hint">Essas informações ajudam o Gerador Inteligente a escolher uma combinação coerente.</div>
+</div>
+
+<div class="field">
+<label>Gerador Inteligente</label>
+<div class="field" style="margin-bottom:10px">
+<label for="profile">Perfil de combate</label>
+<select id="profile">
+<option value="ofensivo">⚔️ Ofensivo</option>
+<option value="defensivo">🛡️ Defensivo</option>
+<option value="equilibrado">⚖️ Equilibrado</option>
+<option value="suporte">🧙 Suporte</option>
+<option value="assassino">🗡️ Assassino</option>
+<option value="estrategico">🐺 Estratégico</option>
+</select>
+</div>
+<div class="field" style="margin-bottom:10px">
+<label for="mana">Mana</label>
+<select id="mana">
+<option value="2">2</option><option value="3">3</option><option value="4" selected>4</option>
+<option value="5">5</option><option value="6">6</option>
+</select>
+</div>
+<button class="primary" id="generate">✨ Gerar atributos e habilidade</button>
+<div class="hint" id="generatorHint">IA = criatividade; regras = validação; usuário = decisão final.</div>
+</div>
+
+<div class="field">
+<label>Atributos do Card Duels</label>
+<div class="stats">
+<div class="stat"><input id="atk" type="number" min="0" max="50" value="10"><div class="hint" style="text-align:center">ATK</div></div>
+<div class="stat"><input id="def" type="number" min="0" max="50" value="10"><div class="hint" style="text-align:center">DEF</div></div>
+</div>
+<div class="hint" id="balanceHint">ATK + DEF = Mana × 5 → 10 + 10 = 20.</div>
+</div>
+
+<div class="field">
+<label for="abilityName">Habilidade</label>
+<input id="abilityName" type="text" placeholder="Nome da habilidade">
+</div>
+<div class="field">
+<label for="skill">Descrição da habilidade</label>
+<textarea id="skill" placeholder="A descrição da habilidade aparecerá aqui. Você pode editar livremente."></textarea>
+<div class="hint">A habilidade é salva como dado da carta; não altera a imagem PNG.</div>
+</div>
+
+<div class="buttons">
+<button class="secondary" id="regenerate">🔄 Gerar novamente</button>
+<button class="secondary" id="editHint">✏️ Editar manualmente</button>
+</div>
+<div class="buttons"><button class="secondary" id="reset">Restaurar</button><button class="primary" id="download">Baixar PNG</button></div>
+<button class="album-btn" id="save">✦ Adicionar ao álbum</button>
+</section>
+
+<section class="preview"><div class="canvas-wrap"><canvas id="canvas" width="900" height="1350"></canvas></div></section>
+</main>
+
+<section class="recent"><h2>Cartas Recentes</h2><p>As últimas cartas salvas no mesmo banco IndexedDB utilizado pelo Álbum.</p><div class="grid" id="recent"></div></section>
+
+<footer><strong>Um Mundo <span>Além das Páginas</span></strong><br><br>Onde cada história leva a um novo mundo.</footer>
+
+<div class="modal" id="modal"><button class="close" id="close">×</button><img id="modalImg" alt="Carta ampliada"></div>
+
+<script>
+const DB_NAME="UmMundoAlemDasPaginasAlbum", DB_VERSION=2, CARD_STORE="cards", COLLECTION_STORE="collections";
+const $=id=>document.getElementById(id);
+const canvas=$("canvas"),ctx=canvas.getContext("2d");
+const nameInput=$("name");
+let image=new Image();
+image.crossOrigin="anonymous";
+image.src="https://i.postimg.cc/cJ893vgm/AP1Gcz-NTm-Xz4F3qrkp-LQuhwdg-Ye4do-Og.png";
+let db=null;
+
+/* =========================================================
+   BASE DE CONHECIMENTO DO GERADOR INTELIGENTE
+   IA = criatividade; regras = validação; usuário = decisão final.
+========================================================= */
+
+const PROFILES={
+  ofensivo:{label:"Ofensivo",minAtk:.60,maxAtk:1.00},
+  defensivo:{label:"Defensivo",minAtk:.00,maxAtk:.44},
+  equilibrado:{label:"Equilibrado",minAtk:.45,maxAtk:.59},
+  suporte:{label:"Suporte",minAtk:.35,maxAtk:.60},
+  assassino:{label:"Assassino",minAtk:.60,maxAtk:1.00},
+  estrategico:{label:"Estratégico",minAtk:.45,maxAtk:.65}
+};
+
+const ABILITIES=[
+  {id:"investida",name:"Investida",
+   description:"A carta pode atacar no mesmo turno em que é colocada em campo.",
+   profiles:["ofensivo","assassino","estrategico"],minAtk:.60},
+
+  {id:"sangramento",name:"Sangramento",
+   description:"Quando esta carta ataca, aplica Sangramento: -2 DEF ao alvo.",
+   profiles:["ofensivo","assassino"],minAtk:.50},
+
+  {id:"dreno",name:"Dreno",
+   description:"Quando esta carta causa dano, recupera +2 DEF.",
+   profiles:["ofensivo","assassino"],minAtk:.50},
+
+  {id:"rompedor",name:"Rompedor",
+   description:"Quando esta carta destrói um defensor, o dano excedente é causado diretamente ao HP do inimigo.",
+   profiles:["ofensivo"],minAtk:.65},
+
+  {id:"golpe_amplo",name:"Golpe Amplo",
+   description:"O ataque afeta a carta à sua frente mais as cartas ao lado.",
+   profiles:["ofensivo","estrategico"],maxAtk:5},
+
+  {id:"armadura",name:"Armadura",
+   description:"Reduz em 3 o dano recebido em combate.",
+   profiles:["defensivo"],minDef:.55},
+
+  {id:"retaliacao",name:"Retaliação",
+   description:"Quando esta carta é atacada, causa +2 de dano à carta atacante.",
+   profiles:["defensivo","estrategico"],minDef:.55},
+
+  {id:"protetor",name:"Protetor",
+   description:"Concede +3 DEF a uma carta aliada adjacente.",
+   profiles:["defensivo","suporte"],minDef:.55},
+
+  {id:"atordoar",name:"Atordoar",
+   description:"Se esta carta for destruída após ser atacada, a carta que a destruiu não poderá atacar no próximo turno.",
+   profiles:["defensivo","estrategico","assassino"]},
+
+  {id:"veneno",name:"Veneno",
+   description:"Quando esta carta é destruída, aplica Veneno à carta que a destruiu: -2 DEF contínuo.",
+   profiles:["assassino","estrategico"]},
+
+  {id:"predador_solitario",name:"Predador Solitário",
+   description:"Recebe +2 ATK para cada lane adjacente vazia.",
+   profiles:["assassino","estrategico"],minAtk:.55},
+
+  {id:"fortalecer",name:"Fortalecer",
+   description:"Aumenta em +2 ATK as cartas aliadas adjacentes.",
+   profiles:["suporte","estrategico","equilibrado"]}
+];
+
+const KEYWORD_MAP={
+  ofensivo:["agressivo","agressiva","ataque","atacante","guerreiro","brutal","força","forte","combate","ofensivo","ofensiva","poderoso","poderosa"],
+  defensivo:["defesa","defensivo","defensiva","resistente","resistência","armadura","escudo","protetor","proteção","durável"],
+  assassino:["ágil","agil","rápido","rapida","rápida","furtivo","furtiva","assassino","assassina","letal","preciso","precisa","emboscada"],
+  suporte:["cura","curandeiro","curandeira","aliado","aliados","suporte","apoio","estrategista","buff","fortalecer","proteger"],
+  estrategico:["estratégico","estratégica","estrategia","estratégia","tático","tática","controle","armadilha","planejamento","inteligente"],
+  equilibrado:["equilibrado","equilibrada","versátil","versatil","balanceado","balanceada"]
+};
+
+function normalizeText(value){
+  return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+function profileFromCharacter(text,selected){
+  const t=normalizeText(text);
+  const scores={ofensivo:0,defensivo:0,equilibrado:0,suporte:0,assassino:0,estrategico:0};
+  Object.entries(KEYWORD_MAP).forEach(([profile,words])=>{
+    words.forEach(word=>{if(t.includes(normalizeText(word))) scores[profile]++});
+  });
+  return {selected,scores};
+}
+
+function statPair(mana,profile){
+  const total=mana*5;
+  const p=PROFILES[profile]||PROFILES.equilibrado;
+  let min=Math.ceil(total*p.minAtk);
+  let max=Math.floor(total*p.maxAtk);
+  if(max<min) max=min;
+  min=Math.max(0,Math.min(total,min));
+  max=Math.max(min,Math.min(total,max));
+
+  const options=[];
+  for(let atk=min;atk<=max;atk++) options.push({atk,def:total-atk});
+  if(!options.length) options.push({atk:Math.round(total*.5),def:Math.floor(total/2)});
+  return options[Math.floor(Math.random()*options.length)];
+}
+
+function compatibleAbilities(mana,atk,def,profile,description){
+  const char=profileFromCharacter(description,profile);
+  return ABILITIES.map(a=>{
+    let score=0;
+    if(a.profiles.includes(profile)) score+=8;
+    else if(a.profiles.some(p=>char.scores[p]>0)) score+=2;
+    else score+=1;
+
+    if(a.minAtk!=null){
+      if(atk/Math.max(1,mana*5)>=a.minAtk) score+=5;
+      else score-=12;
+    }
+    if(a.minDef!=null){
+      if(def/Math.max(1,mana*5)>=a.minDef) score+=5;
+      else score-=12;
+    }
+    if(a.maxAtk!=null){
+      if(atk<=a.maxAtk) score+=10;
+      else score-=30;
+    }
+
+    if(char.scores[a.profiles[0]]>0) score+=3;
+    score+=Math.random()*5;
+    return {ability:a,score};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+}
+
+function generateCard(){
+  const mana=Math.max(2,Math.min(6,+$("mana").value||4));
+  $("mana").value=mana;
+  const profile=$("profile").value;
+  const description=$("characterDescription").value;
+  let stats=statPair(mana,profile);
+
+  // Re-roll until all hard ability restrictions can be respected.
+  let ranked=compatibleAbilities(mana,stats.atk,stats.def,profile,description);
+  if(ranked[0]?.ability.id==="golpe_amplo" && stats.atk>5){
+    stats={atk:Math.min(5,stats.atk),def:mana*5-Math.min(5,stats.atk)};
+    ranked=compatibleAbilities(mana,stats.atk,stats.def,profile,description);
+  }
+
+  // Try a few stat/ability combinations to produce a coherent result.
+  let chosen=null;
+  for(let i=0;i<12;i++){
+    const candidate=statPair(mana,profile);
+    const list=compatibleAbilities(mana,candidate.atk,candidate.def,profile,description);
+    if(list.length){
+      const top=list[0].ability;
+      if(top.id!=="golpe_amplo" || candidate.atk<=5){
+        stats=candidate;
+        chosen=top;
+        break;
+      }
+    }
+  }
+  if(!chosen) chosen=ranked[0]?.ability||ABILITIES[0];
+
+  // Final deterministic validation of the selected ability.
+  if(chosen.id==="golpe_amplo" && stats.atk>5){
+    stats={atk:5,def:mana*5-5};
+  }
+
+  $("atk").value=stats.atk;
+  $("def").value=stats.def;
+  $("abilityName").value=chosen.name;
+  $("skill").value=chosen.description;
+  validateStats();
+
+  const charName=nameInput.value.trim()||"Personagem";
+  $("generatorHint").textContent=
+    `Sugestão gerada para "${charName}": ${chosen.name}. Você pode editar qualquer campo antes de salvar.`;
+  $("generatorHint").className="hint valid";
+}
+
+function validateStats(){
+  const mana=Math.max(2,Math.min(6,+$("mana").value||2));
+  $("mana").value=mana;
+  const total=mana*5;
+  let atk=Math.max(0,Math.floor(+$("atk").value||0));
+  let def=Math.max(0,Math.floor(+$("def").value||0));
+
+  if(atk+def!==total){
+    const targetDef=total-atk;
+    if(targetDef>=0){def=targetDef}
+    else {atk=total;def=0}
+    $("atk").value=atk;
+    $("def").value=def;
+  }
+
+  const ok=(atk+def===total);
+  const extra=$("abilityName").value==="Golpe Amplo" && atk>5;
+  $("balanceHint").textContent=
+    `ATK + DEF = Mana × 5 → ${atk} + ${def} = ${total} ${ok&&!extra?"✓":"⚠"}`;
+  $("balanceHint").className="hint "+(ok&&!extra?"valid":"invalid");
+  return ok&&!extra;
+}
+
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    if(db)return resolve(db);
+    const r=indexedDB.open(DB_NAME,DB_VERSION);
+    r.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains(CARD_STORE))d.createObjectStore(CARD_STORE,{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains(COLLECTION_STORE))d.createObjectStore(COLLECTION_STORE,{keyPath:"id",autoIncrement:true});
+    };
+    r.onsuccess=e=>{db=e.target.result;resolve(db)};
+    r.onerror=()=>reject(r.error);
+  });
+}
+
+function getCards(){
+  return openDB().then(d=>new Promise((res,rej)=>{
+    const q=d.transaction(CARD_STORE,"readonly").objectStore(CARD_STORE).getAll();
+    q.onsuccess=()=>res(q.result);
+    q.onerror=()=>rej(q.error);
+  }));
+}
+
+function addCard(card){
+  return openDB().then(d=>new Promise((res,rej)=>{
+    const t=d.transaction(CARD_STORE,"readwrite");
+    const q=t.objectStore(CARD_STORE).add(card);
+    q.onsuccess=()=>res(q.result);
+    q.onerror=()=>rej(q.error);
+  }));
+}
+
+function work(){
+  return $("work").value==="Outros"
+    ?($("otherWork").value.trim()||"Coleção de personagens")
+    :$("work").value;
+}
+
+/* =========================================================
+   MOLDURA ORNAMENTAL — CURVAS
+========================================================= */
+function drawOrnamentalCurvesName(){
+  const centerX=canvas.width/2;
+  const y=105;
+  const halfWidth=340;
+
+  ctx.shadowColor="rgba(0,0,0,0.85)";
+  ctx.shadowBlur=8;
+  ctx.strokeStyle="#c9a227";
+  ctx.lineWidth=3;
+
+  ctx.beginPath();
+  ctx.moveTo(centerX-halfWidth,y);
+  ctx.lineTo(centerX-120,y);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(centerX+120,y);
+  ctx.lineTo(centerX+halfWidth,y);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(centerX-120,y);
+  ctx.quadraticCurveTo(centerX-145,y-25,centerX-170,y);
+  ctx.quadraticCurveTo(centerX-145,y+25,centerX-120,y);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(centerX+120,y);
+  ctx.quadraticCurveTo(centerX+145,y-25,centerX+170,y);
+  ctx.quadraticCurveTo(centerX+145,y+25,centerX+120,y);
+  ctx.stroke();
+
+  ctx.fillStyle="#c9a227";
+  ctx.font="21px Georgia, serif";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("✦",centerX-190,y);
+  ctx.fillText("✦",centerX+190,y);
+
+  ctx.fillStyle="#f3ead5";
+  ctx.font="bold 42px Georgia, serif";
+  ctx.shadowColor="rgba(0,0,0,0.9)";
+  ctx.shadowBlur=8;
+  ctx.fillText(nameInput.value||"Personagem",centerX,y);
+
+  ctx.shadowColor="transparent";
+  ctx.shadowBlur=0;
+}
+
+/* =========================================================
+   MOLDURA ORNAMENTAL — LINHAS
+========================================================= */
+function drawOrnamentalLinesName(){
+  const y=105;
+  ctx.strokeStyle="#c9a227";
+  ctx.lineWidth=2;
+
+  ctx.beginPath();
+  ctx.moveTo(135,y-34);ctx.lineTo(310,y-34);
+  ctx.moveTo(590,y-34);ctx.lineTo(765,y-34);
+  ctx.moveTo(135,y+34);ctx.lineTo(310,y+34);
+  ctx.moveTo(590,y+34);ctx.lineTo(765,y+34);
+  ctx.stroke();
+
+  ctx.fillStyle="#c9a227";
+  ctx.font="20px Georgia, serif";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("✦",120,y);
+  ctx.fillText("✦",780,y);
+
+  ctx.fillStyle="#f0e4c6";
+  ctx.font="bold 45px Georgia, serif";
+  ctx.fillText(nameInput.value||"Personagem",450,y);
+}
+
+/* =========================================================
+   MOLDURA ORNAMENTAL — DUPLA
+========================================================= */
+function roundedRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.roundRect(x,y,w,h,r);
+}
+
+function drawOrnamentalBoxName(){
+  const width=770,height=125;
+  const x=(canvas.width-width)/2;
+  const y=50;
+
+  roundedRect(ctx,x,y,width,height,16);
+  ctx.fillStyle="rgba(17,17,31,0.84)";
+  ctx.fill();
+  ctx.strokeStyle="#C9A227";
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+  roundedRect(ctx,x+9,y+9,width-18,height-18,11);
+  ctx.strokeStyle="rgba(201,162,39,0.55)";
+  ctx.lineWidth=1;
+  ctx.stroke();
+
+  ctx.fillStyle="#C9A227";
+  let fontSize=42;
+  ctx.font=`600 ${fontSize}px 'Playfair Display', serif`;
+  const text=nameInput.value||"Personagem";
+  if(ctx.measureText(text).width>680){
+    ctx.font="600 35px 'Playfair Display', serif";
+  }
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText(text,canvas.width/2,y+height/2);
+
+  ctx.font="24px serif";
+  ctx.fillText("✦",x+38,y+height/2);
+  ctx.fillText("✦",x+width-38,y+height/2);
+}
+
+function drawSimpleName(){
+  const text=nameInput.value||"Personagem";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillStyle="#f0e4c6";
+  ctx.font="600 42px Georgia,serif";
+  if(ctx.measureText(text).width>680)ctx.font="600 34px Georgia,serif";
+  ctx.shadowColor="rgba(0,0,0,.85)";
+  ctx.shadowBlur=7;
+  ctx.fillText("✦ "+text+" ✦",450,95);
+  ctx.shadowColor="transparent";
+  ctx.shadowBlur=0;
+}
+
+function draw(){
+  ctx.clearRect(0,0,900,1350);
+  const g=ctx.createLinearGradient(0,0,0,1350);
+  g.addColorStop(0,"#17151f");
+  g.addColorStop(1,"#08080d");
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,900,1350);
+
+  if(image.complete&&image.naturalWidth){
+    const scale=Math.max(900/image.naturalWidth,1350/image.naturalHeight)*+$("zoom").value;
+    const w=image.naturalWidth*scale,h=image.naturalHeight*scale;
+    const ox=(900-w)/2+ +$("x").value,oy=(1350-h)/2+ +$("y").value;
+    ctx.save();
+    ctx.beginPath();ctx.roundRect(0,0,900,1350,28);ctx.clip();
+    ctx.drawImage(image,ox,oy,w,h);
+    const v=ctx.createRadialGradient(450,550,150,450,650,850);
+    v.addColorStop(0,"transparent");
+    v.addColorStop(.7,"rgba(0,0,0,.08)");
+    v.addColorStop(1,"rgba(0,0,0,.65)");
+    ctx.fillStyle=v;ctx.fillRect(0,0,900,1350);
+    ctx.restore();
+  }
+
+  ctx.strokeStyle="rgba(201,162,39,.85)";
+  ctx.lineWidth=2;
+  ctx.beginPath();ctx.roundRect(14,14,872,1322,22);ctx.stroke();
+
+  const style=$("style").value;
+  if(style==="curves")drawOrnamentalCurvesName();
+  else if(style==="lines")drawOrnamentalLinesName();
+  else if(style==="box")drawOrnamentalBoxName();
+  else drawSimpleName();
+
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillStyle="#c9a227";
+  ctx.font="700 24px Montserrat,sans-serif";
+  ctx.fillText(work().toUpperCase(),450,1280);
+}
+
+function renderRecent(){
+  getCards().then(cards=>{
+    $("recent").innerHTML="";
+    cards.slice(-8).reverse().forEach(c=>{
+      const u=URL.createObjectURL(c.image instanceof Blob?c.image:new Blob());
+      const el=document.createElement("div");
+      el.className="card";
+      const ability=c.abilityName||c.skillName||"";
+      const description=c.skillDescription||c.abilityDescription||"";
+      el.innerHTML=`<img src="${u}">
+        <h3>${esc(c.name)}</h3>
+        <div class="work">${esc(c.work||"")}</div>
+        <div class="mini-stats"><span>⚡ ${c.mana??"—"}</span><span>⚔ ${c.atk??"—"}</span><span>🛡 ${c.def??"—"}</span></div>
+        <div class="skill"><strong>${esc(ability)}</strong><br>${esc(description||"Sem habilidade descrita.")}</div>`;
+      el.querySelector("img").onclick=()=>{
+        $("modalImg").src=u;
+        $("modal").classList.add("show");
+      };
+      $("recent").appendChild(el);
+    });
+  });
+}
+
+function esc(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+["zoom","x","y"].forEach(id=>{
+  $(id).addEventListener("input",()=>{
+    $(id+"Value").textContent=id==="zoom"
+      ?Number($(id).value).toFixed(2)+"×"
+      :$(id).value;
+    draw();
+  });
+});
+
+["name","otherWork","characterDescription"].forEach(id=>{
+  $(id).addEventListener("input",draw);
+});
+
+$("work").addEventListener("change",()=>{
+  $("otherWorkBox").style.display=$("work").value==="Outros"?"block":"none";
+  draw();
+});
+
+$("style").addEventListener("change",draw);
+
+$("mana").addEventListener("change",()=>{
+  const total=(+$("mana").value||2)*5;
+  if(+$("atk").value+ +$("def").value!==total){
+    $("def").value=Math.max(0,total-(+$("atk").value||0));
+  }
+  validateStats();
+});
+
+["atk","def"].forEach(id=>{
+  $(id).addEventListener("input",validateStats);
+});
+
+$("abilityName").addEventListener("input",validateStats);
+
+$("generate").onclick=generateCard;
+$("regenerate").onclick=generateCard;
+$("editHint").onclick=()=>{
+  $("atk").focus();
+  $("generatorHint").textContent="Edição manual ativada. O sistema continuará validando ATK + DEF = Mana × 5.";
+};
+
+$("image").addEventListener("change",e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    image=new Image();
+    image.onload=draw;
+    image.src=ev.target.result;
+  };
+  r.readAsDataURL(f);
+});
+
+$("download").onclick=()=>{
+  const a=document.createElement("a");
+  a.download=(nameInput.value||"personagem")+"-carta.png";
+  a.href=canvas.toDataURL("image/png");
+  a.click();
+};
+
+$("save").onclick=async()=>{
+  const btn=$("save");
+  btn.disabled=true;
+  try{
+    if(!validateStats()){
+      alert("Os atributos precisam respeitar a regra ATK + DEF = Mana × 5.");
+      return;
+    }
+
+    const abilityName=$("abilityName").value.trim();
+    const skillDescription=$("skill").value.trim();
+
+    await addCard({
+      name:nameInput.value.trim()||"Personagem",
+      work:work(),
+      image:await new Promise((res,rej)=>
+        canvas.toBlob(b=>b?res(b):rej(new Error("PNG inválido")),"image/png")
+      ),
+      createdAt:Date.now(),
+      mana:+$("mana").value,
+      atk:+$("atk").value,
+      def:+$("def").value,
+      profile:$("profile").value,
+      characterDescription:$("characterDescription").value.trim(),
+      abilityName,
+      skillDescription,
+      abilityDescription:skillDescription
+    });
+
+    await renderRecent();
+    document.querySelector(".recent").scrollIntoView({behavior:"smooth"});
+  }catch(e){
+    console.error(e);
+    alert("Não foi possível adicionar esta carta ao álbum.");
+  }finally{
+    btn.disabled=false;
+  }
+};
+
+$("reset").onclick=()=>{location.reload()};
+$("close").onclick=()=>$("modal").classList.remove("show");
+$("modal").onclick=e=>{
+  if(e.target===$("modal"))$("modal").classList.remove("show");
+};
+
+image.onload=draw;
+draw();
+renderRecent();
+validateStats();
+</script>
+</body>
+</html>
