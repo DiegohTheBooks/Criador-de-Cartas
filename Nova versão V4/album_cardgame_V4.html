@@ -53,13 +53,15 @@ footer{text-align:center;border-top:1px solid rgba(201,162,39,.22);padding:30px;
 <img id="vImage" class="preview" alt="">
 <div class="details"><div id="vWork" class="work"></div>
 <div class="bigstats"><div class="bigstat"><b id="vMana">—</b>Mana</div><div class="bigstat"><b id="vAtk">—</b>ATK</div><div class="bigstat"><b id="vDef">—</b>DEF</div></div>
-<h3>Habilidade</h3><p id="vAbility">Nenhuma habilidade descrita.</p>
+<h3>Habilidade</h3><p id="vAbility">Nenhuma habilidade descrita.</p><div id="vMeta" class="meta"></div>
 <div class="viewer-actions">
 <button class="viewer-action primary" id="exportCard">🎮 Exportar para o game</button>
 <button class="viewer-action" id="downloadCard">↓ Baixar carta</button>
 <button class="viewer-action" id="moveCard">📁 Mover para coleção</button>
 <button class="viewer-action danger" id="deleteCard">🗑 Excluir carta</button>
 </div></div></div></div>
+
+<div class="modal modal-small" id="deleteNodeModal"><div class="box"><div class="viewer-head"><h2 id="deleteNodeTitle">Excluir pasta</h2><button class="close" id="closeDeleteNode">×</button></div><p id="deleteNodeText" style="color:#aaa3b5;font-size:.82rem;line-height:1.6"></p><div class="modal-actions"><button class="viewer-action" id="cancelDeleteNode">Cancelar</button><button class="viewer-action danger" id="confirmDeleteNode">Excluir</button></div></div></div>
 
 <div class="modal modal-small" id="moveModal"><div class="box">
 <div class="viewer-head"><h2>Mover carta</h2><button class="close" id="closeMove">×</button></div>
