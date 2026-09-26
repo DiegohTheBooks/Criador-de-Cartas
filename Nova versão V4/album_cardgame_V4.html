@@ -97,7 +97,7 @@ function renderTree(){
  let h='<div class="tree-row"><button class="collection '+(current===ROOT?"active":"")+'" data-node="'+ROOT+'">▦ Todas as cartas<small>'+cards.length+' carta(s)</small></button></div>';
  h+='<div class="tree-row"><button class="collection '+(current===UNCOLLECTED?"active":"")+'" data-node="'+UNCOLLECTED+'">📥 Sem Coleção<small>'+cards.filter(c=>c.collectionId==null).length+' carta(s)</small></button></div>';
  childrenOf(null).forEach(n=>h+=renderNode(n));
- $("collections").innerHTML=h;
+ $("tree").innerHTML=h;
  document.querySelectorAll("[data-node]").forEach(b=>b.onclick=()=>selectNode(b.dataset.node));
  document.querySelectorAll("[data-create-category]").forEach(b=>b.onclick=e=>{e.stopPropagation();openNodeModal("category",b.dataset.createCategory)});
  document.querySelectorAll("[data-rename-node]").forEach(b=>b.onclick=e=>{e.stopPropagation();openNodeModal("rename",b.dataset.renameNode)});
